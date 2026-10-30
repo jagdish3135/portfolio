@@ -20,7 +20,7 @@ for (const d of devices) {
   page.on('pageerror', (e) => errors.push(`${d.name}: ${e.message}`))
   page.on('console', (m) => m.type() === 'error' && errors.push(`${d.name}: ${m.text()}`))
   await page.goto(BASE + path, { waitUntil: 'networkidle' })
-  await page.waitForSelector('[role=status]', { state: 'detached', timeout: 15000 }).catch(() => {})
+  await page.waitForSelector('[data-loader]', { state: 'detached', timeout: 15000 }).catch(() => {})
   await page.addStyleTag({ content: '.grain,.skip-link{display:none!important}' })
   for (const id of ids) {
     // Walk down to the section so every scroll-triggered reveal on the way fires.

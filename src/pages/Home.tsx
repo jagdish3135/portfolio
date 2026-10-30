@@ -4,6 +4,8 @@ import { Hero } from '../sections/Hero'
 import { About } from '../sections/About'
 import { WhatIDo } from '../sections/WhatIDo'
 import { Work } from '../sections/Work'
+import { Toolkit } from '../sections/Toolkit'
+import { Contact } from '../sections/Contact'
 import { ScrollTrigger } from '../lib/motion'
 import { getLenis, scrollTo } from '../lib/smooth'
 import { setMeta } from '../lib/meta'
@@ -39,6 +41,8 @@ export default function Home() {
       <About />
       <WhatIDo />
       <Work />
+      <Toolkit />
+      <Contact />
     </>
   )
 }

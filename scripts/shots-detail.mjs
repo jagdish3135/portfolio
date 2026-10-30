@@ -11,7 +11,7 @@ async function open(page) {
   page.on('pageerror', (e) => errors.push(e.message))
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
   await page.goto(`${BASE}/work/${slug}`, { waitUntil: 'networkidle' })
-  await page.waitForSelector('[role=status]', { state: 'detached' })
+  await page.waitForSelector('[data-loader]', { state: 'detached' })
   await page.addStyleTag({ content: hide })
   const h = await page.evaluate(() => document.documentElement.scrollHeight)
   for (let y = 0; y < h; y += 350) {
@@ -50,7 +50,7 @@ console.log('after next click:', d.url())
 
 // Lightbox
 await d.goto(`${BASE}/work/${slug}`)
-await d.waitForSelector('[role=status]', { state: 'detached' })
+await d.waitForSelector('[data-loader]', { state: 'detached' })
 const zoom = d.locator('button[aria-label^="Show full size"]').first()
 await zoom.scrollIntoViewIfNeeded()
 await d.waitForTimeout(800)

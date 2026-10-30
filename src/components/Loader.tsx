@@ -100,7 +100,7 @@ export function Loader({ onReveal, onDone }: Props) {
   }, [])
 
   return (
-    <div ref={rootRef} className="fixed inset-0 z-[9500]" role="status" aria-label="Loading">
+    <div ref={rootRef} className="fixed inset-0 z-[9500]" role="status" aria-label="Loading" data-loader>
       <div ref={curtainRef} className="absolute inset-0 bg-bg" style={{ clipPath: 'inset(0% 0% 0% 0%)' }}>
         <div data-loader-meta className="container-x absolute inset-x-0 bottom-0 pb-8">
           <div className="grid-12 items-end">

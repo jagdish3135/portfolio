@@ -18,7 +18,7 @@ for (const [device, opts] of [
   for (const slug of slugs) {
     errors.length = 0
     await page.goto(`${BASE}/work/${slug}`, { waitUntil: 'networkidle' })
-    await page.waitForSelector('[role=status]', { state: 'detached', timeout: 15000 }).catch(() => {})
+    await page.waitForSelector('[data-loader]', { state: 'detached', timeout: 15000 }).catch(() => {})
     const h = await page.evaluate(() => document.documentElement.scrollHeight)
     for (let y = 0; y < h; y += 500) {
       await page.evaluate((v) => scrollTo(0, v), y)

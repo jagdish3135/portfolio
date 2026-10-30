@@ -10,7 +10,7 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
 async function shot(width, height, file, opts = {}) {
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 })
   await page.goto(URL, { waitUntil: 'networkidle' })
-  await page.waitForSelector('[role=status]', { state: 'detached', timeout: 15000 })
+  await page.waitForSelector('[data-loader]', { state: 'detached', timeout: 15000 })
   await page.waitForTimeout(2500) // let the layers settle apart
   if (opts.sceneOnly) {
     // Poster: the canvas alone, without the page copy on top.

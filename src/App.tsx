@@ -4,6 +4,7 @@ import { Cursor, refreshCursor } from './components/Cursor'
 import { Grain } from './components/Grain'
 import { Loader } from './components/Loader'
 import { Nav } from './components/Nav'
+import { Footer } from './components/Footer'
 import { IntroProvider, useIntro } from './lib/intro'
 import { FlightProvider } from './lib/flight'
 import { TransitionProvider } from './lib/transition'
@@ -41,7 +42,7 @@ function Shell() {
         />
       )}
       <Nav />
-      <main id="main">
+      <main id="main" tabIndex={-1} className="outline-none">
         <Suspense fallback={<div className="min-h-[100svh]" />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -50,6 +51,7 @@ function Shell() {
           </Routes>
         </Suspense>
       </main>
+      <Footer />
       <Grain />
       <Cursor />
     </>
