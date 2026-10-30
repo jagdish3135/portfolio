@@ -1,7 +1,7 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
 import { usePageTransition } from '../lib/transition'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { useIntro } from '../lib/intro'
 import { scrollTo } from '../lib/smooth'
@@ -54,7 +54,7 @@ export function Nav() {
 
   return (
     <>
-      <motion.header
+      <m.header
         className="fixed inset-x-0 top-0 z-50"
         initial={false}
         animate={{ y: hidden && !open ? '-110%' : '0%' }}
@@ -80,7 +80,7 @@ export function Nav() {
             JP
           </a>
 
-          <motion.ul
+          <m.ul
             className="col-span-6 hidden items-center justify-center gap-8 md:flex"
             initial={{ opacity: 0, y: -8 }}
             animate={ready ? { opacity: 1, y: 0 } : {}}
@@ -99,9 +99,9 @@ export function Nav() {
                 </MagneticButton>
               </li>
             ))}
-          </motion.ul>
+          </m.ul>
 
-          <motion.div
+          <m.div
             className="col-span-6 flex items-center justify-end gap-3 md:col-span-3"
             initial={{ opacity: 0, y: -8 }}
             animate={ready ? { opacity: 1, y: 0 } : {}}
@@ -120,13 +120,13 @@ export function Nav() {
             >
               {open ? 'Close' : 'Menu'}
             </button>
-          </motion.div>
+          </m.div>
         </nav>
-      </motion.header>
+      </m.header>
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             className="fixed inset-0 z-40 flex flex-col justify-end bg-bg px-[var(--gutter)] pb-10 pt-24 md:hidden"
             initial={{ clipPath: 'inset(0 0 100% 0)' }}
@@ -146,7 +146,7 @@ export function Nav() {
             <p className="mt-10 inline-flex items-center gap-2.5 text-[14px] text-mute">
               <span className="pulse-dot" aria-hidden="true" /> Available for work
             </p>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

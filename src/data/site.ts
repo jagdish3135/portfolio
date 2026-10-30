@@ -1,5 +1,7 @@
 /** Personal details used across the site. Edit here; nothing else needs to change. */
 export const site = {
+  /** The live address. Change it here (or set SITE_URL when building) once the domain is final. */
+  url: 'https://jagdishpatil.vercel.app',
   name: 'Jagdish Patil',
   email: 'jagdishpatil1341@gmail.com',
   location: 'Surat, Gujarat, India',

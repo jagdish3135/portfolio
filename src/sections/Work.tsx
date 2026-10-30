@@ -61,7 +61,6 @@ function StackedWork() {
         const s = place(i - p, vh)
         el.style.transform = `translate3d(-50%, calc(-50% + ${s.y}px), ${s.z}px) rotateX(${s.rx}deg)`
         el.style.opacity = String(s.opacity)
-        el.style.visibility = s.opacity < 0.01 ? 'hidden' : 'visible'
         el.style.zIndex = String(100 - i)
         el.style.pointerEvents = Math.abs(i - p) < 0.45 ? 'auto' : 'none'
         dims.current[i].style.opacity = String(s.dim)

@@ -12,7 +12,7 @@ const hide = '.grain,.skip-link{display:none!important}'
 // Desktop
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
 watch(page, 'desktop')
-await page.goto(BASE, { waitUntil: 'networkidle' })
+await page.goto(BASE + '/?scene=full', { waitUntil: 'networkidle' })
 await page.waitForSelector('[data-loader]', { state: 'detached' })
 await page.addStyleTag({ content: hide })
 const walk = async (to) => {

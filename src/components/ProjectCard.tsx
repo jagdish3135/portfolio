@@ -4,6 +4,9 @@ import { pad, type Project } from '../data/projects'
 import { useFlight } from '../lib/flight'
 import { isTouch, prefersReducedMotion } from '../lib/device'
 
+/** Desktop stack: about 62vw wide. Grid on tablets: half the width. Phones: full width. */
+const COVER_SIZES = '(min-width: 1024px) 62vw, (min-width: 768px) 46vw, 92vw'
+
 type Props = {
   project: Project
   index: number
@@ -98,10 +101,16 @@ export function ProjectCard({ project: p, index, variant, eager, onFocus }: Prop
       <article className="project-card__panel">
         <div ref={mediaRef} className="project-card__media" data-cover={p.slug}>
           <picture>
-            <source srcSet={`${p.media.desktop}.avif`} type="image/avif" />
+            <source
+              srcSet={`${p.media.desktop}-800.avif 800w, ${p.media.desktop}.avif 1440w`}
+              sizes={COVER_SIZES}
+              type="image/avif"
+            />
             <img
               ref={imgRef}
               src={`${p.media.desktop}.webp`}
+              srcSet={`${p.media.desktop}-800.webp 800w, ${p.media.desktop}.webp 1440w`}
+              sizes={COVER_SIZES}
               alt={`${p.name} home page`}
               width={1440}
               height={900}

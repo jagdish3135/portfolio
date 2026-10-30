@@ -4,7 +4,7 @@
 // Usage: start the dev server (npm run dev), then: node scripts/capture-poster.mjs
 import { chromium } from 'playwright'
 
-const URL = process.env.URL ?? 'http://localhost:5220/'
+const URL = process.env.URL ?? 'http://localhost:5220/?scene=full'
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
 
 async function shot(width, height, file, opts = {}) {

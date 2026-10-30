@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, Lightformer } from '@react-three/drei'
+import { Studio as StudioLights } from './primitives'
 import * as THREE from 'three'
 import { PanelStack } from './PanelStack'
 
@@ -85,16 +85,18 @@ function Backdrop() {
   )
 }
 
+const STUDIO = [
+  { form: 'rect' as const, intensity: 2.6, position: [0, 4, 2] as [number, number, number], rotation: [Math.PI / 2, 0, 0] as [number, number, number], scale: [8, 3, 1] as [number, number, number] },
+  { form: 'rect' as const, intensity: 2, position: [-5, 0.5, 1] as [number, number, number], rotation: [0, Math.PI / 2, 0] as [number, number, number], scale: [1.2, 6, 1] as [number, number, number] },
+  { form: 'rect' as const, intensity: 1.4, position: [5, -0.5, 0] as [number, number, number], rotation: [0, -Math.PI / 2, 0] as [number, number, number], scale: [1.2, 6, 1] as [number, number, number] },
+  { form: 'ring' as const, intensity: 0.8, color: '#c6ff3d', position: [3, 2.5, 4] as [number, number, number], scale: 1.2 },
+  { form: 'rect' as const, intensity: 0.5, position: [0, -4, 1] as [number, number, number], rotation: [-Math.PI / 2, 0, 0] as [number, number, number], scale: [6, 2, 1] as [number, number, number] },
+]
+
 /** Studio lighting made in code, so no HDR file is downloaded. */
 function Studio() {
   return (
-    <Environment resolution={256} frames={1}>
-      <Lightformer form="rect" intensity={2.6} position={[0, 4, 2]} rotation-x={Math.PI / 2} scale={[8, 3, 1]} />
-      <Lightformer form="rect" intensity={2} position={[-5, 0.5, 1]} rotation-y={Math.PI / 2} scale={[1.2, 6, 1]} />
-      <Lightformer form="rect" intensity={1.4} position={[5, -0.5, 0]} rotation-y={-Math.PI / 2} scale={[1.2, 6, 1]} />
-      <Lightformer form="ring" intensity={0.8} color="#c6ff3d" position={[3, 2.5, 4]} scale={1.2} />
-      <Lightformer form="rect" intensity={0.5} position={[0, -4, 1]} rotation-x={-Math.PI / 2} scale={[6, 2, 1]} />
-    </Environment>
+    <StudioLights lights={STUDIO} />
   )
 }
 

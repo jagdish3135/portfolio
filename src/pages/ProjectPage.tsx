@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { getProject, pad, projects, type CaseStudy, type Project } from '../data/projects'
+import { loadCaseStudy } from '../data/loadCaseStudy'
 import { useFlight } from '../lib/flight'
-import { gsap, DUR, EASE, STAGGER } from '../lib/motion'
+import { gsap, ScrollTrigger, DUR, EASE, STAGGER } from '../lib/motion'
 import { getLenis } from '../lib/smooth'
 import { setMeta } from '../lib/meta'
 import { TransitionLink } from '../lib/transition'
@@ -191,12 +192,28 @@ function ProjectView({ p }: { p: Project }) {
   const coverRef = useRef<HTMLDivElement>(null)
   const [coverHidden, setCoverHidden] = useState(false)
   const index = projects.findIndex((x) => x.slug === p.slug)
-  const cs = p.caseStudy
+  const [cs, setCs] = useState<CaseStudy | undefined>()
+
+  // The case study text loads in its own small chunk, after the hero is on screen.
+  useEffect(() => {
+    let live = true
+    void loadCaseStudy(p.slug).then((c) => {
+      if (live) setCs(c)
+    })
+    return () => {
+      live = false
+    }
+  }, [p.slug])
+
+  // New sections change the page height: re-measure scroll-triggered reveals.
+  useEffect(() => {
+    if (cs) requestAnimationFrame(() => ScrollTrigger.refresh())
+  }, [cs])
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
     getLenis()?.scrollTo(0, { immediate: true, force: true })
-    setMeta(`${p.name}, a case study — Jagdish Patil`, cs?.summary ?? p.pitch)
+    setMeta(`${p.name}, a case study — Jagdish Patil`, p.summary)
 
     const landing = land(p.slug, coverRef.current!, () => setCoverHidden(false))
     setCoverHidden(landing)
@@ -207,7 +224,7 @@ function ProjectView({ p }: { p: Project }) {
       gsap.from('[data-detail-fade]', { opacity: 0, y: 20, duration: DUR.slow, stagger: STAGGER, ease: EASE, delay: landing ? 0.45 : 0.25 })
     }, root)
     return () => ctx.revert()
-  }, [p.slug, p.name, p.pitch, cs?.summary, land])
+  }, [p.slug, p.name, p.summary, land])
 
   return (
     <article ref={root} style={{ ['--accent' as string]: p.accent }} aria-labelledby="project-title">
@@ -243,9 +260,15 @@ function ProjectView({ p }: { p: Project }) {
             style={{ opacity: coverHidden ? 0 : 1 }}
           >
             <picture>
-              <source srcSet={`${p.media.desktop}.avif`} type="image/avif" />
+              <source
+                srcSet={`${p.media.desktop}-800.avif 800w, ${p.media.desktop}.avif 1440w`}
+                sizes="(min-width: 1440px) 1300px, 92vw"
+                type="image/avif"
+              />
               <img
                 src={`${p.media.desktop}.webp`}
+                srcSet={`${p.media.desktop}-800.webp 800w, ${p.media.desktop}.webp 1440w`}
+                sizes="(min-width: 1440px) 1300px, 92vw"
                 alt={`${p.name} home page`}
                 width={1440}
                 height={900}
@@ -294,11 +317,8 @@ function ProjectView({ p }: { p: Project }) {
       {cs ? (
         <Study p={p} cs={cs} />
       ) : (
-        <section className="container-x my-24 md:my-32" aria-label="Case study">
-          <p className="grid-12 text-[15px] text-mute">
-            <span className="col-span-12 md:col-span-6 md:col-start-4">The full case study for {p.name} is on its way.</span>
-          </p>
-        </section>
+        // Holds the space while the case study loads, so the page doesn't jump.
+        <div className="min-h-[100svh]" aria-busy="true" />
       )}
 
       <ProjectNav slug={p.slug} />

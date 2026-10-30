@@ -7,12 +7,22 @@ export const isTouch = () => mq('(hover: none), (pointer: coarse)')
 
 export const prefersReducedMotion = () => mq('(prefers-reduced-motion: reduce)')
 
-function hasWebGL() {
+/**
+ * 'gpu' when WebGL runs on a graphics card, 'software' when the browser falls back to drawing
+ * on the CPU (SwiftShader, llvmpipe: no GPU, or a blocked one), 'none' without WebGL.
+ * The glass scene is far too heavy for the software path, so those get the still image.
+ */
+function webglSupport(): 'gpu' | 'software' | 'none' {
   try {
     const c = document.createElement('canvas')
-    return !!(c.getContext('webgl2') || c.getContext('webgl'))
+    const gl = (c.getContext('webgl2') || c.getContext('webgl')) as WebGLRenderingContext | null
+    if (!gl) return 'none'
+    const info = gl.getExtension('WEBGL_debug_renderer_info')
+    const renderer = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER))
+    gl.getExtension('WEBGL_lose_context')?.loseContext()
+    return /swiftshader|llvmpipe|software|basic render/i.test(renderer) ? 'software' : 'gpu'
   } catch {
-    return false
+    return 'none'
   }
 }
 
@@ -25,7 +35,10 @@ export type SceneTier = 'full' | 'lite' | 'static'
  * static = a still image (no WebGL, reduced motion, or a low-end device)
  */
 export function getSceneTier(): SceneTier {
-  if (prefersReducedMotion() || !hasWebGL()) return 'static'
+  // ?scene=full|lite|static forces a tier (used by the screenshot scripts, which render without a GPU).
+  const forced = new URLSearchParams(location.search).get('scene')
+  if (forced === 'full' || forced === 'lite' || forced === 'static') return forced
+  if (prefersReducedMotion() || webglSupport() !== 'gpu') return 'static'
   const nav = navigator as Navigator & { deviceMemory?: number }
   const memory = nav.deviceMemory ?? 8
   const cores = nav.hardwareConcurrency ?? 8

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { SectionHeading } from '../components/SectionHeading'
 import { SplitReveal, FadeUp } from '../components/Reveal'
 import { MagneticButton } from '../components/MagneticButton'
@@ -171,7 +171,7 @@ export function Contact() {
         <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[70] flex justify-center px-4" role="status" aria-live="polite">
           <AnimatePresence>
             {toast && (
-              <motion.p
+              <m.p
                 initial={{ y: 24, opacity: 0, scale: 0.96 }}
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 16, opacity: 0 }}
@@ -182,7 +182,7 @@ export function Contact() {
                   ✓
                 </span>
                 Email copied. Paste it anywhere.
-              </motion.p>
+              </m.p>
             )}
           </AnimatePresence>
         </div>,

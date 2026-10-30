@@ -4,3 +4,5 @@ dist
 graphify-out
 *.local
 .shots
+test-results
+playwright-report

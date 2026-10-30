@@ -1,6 +1,6 @@
 import { useMemo, useRef, type MutableRefObject, type ReactNode } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Line, RoundedBox } from '@react-three/drei'
+import { Line, RoundedBox } from './primitives'
 import * as THREE from 'three'
 
 /*

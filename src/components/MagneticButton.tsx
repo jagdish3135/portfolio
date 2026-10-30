@@ -1,10 +1,10 @@
 import { useRef, useState, type ReactNode, type PointerEvent, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { m, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { isTouch, prefersReducedMotion } from '../lib/device'
 import { SPRING } from '../lib/motion'
 
-const MotionLink = motion.create(Link)
+const MotionLink = m.create(Link)
 
 type Variant = 'primary' | 'ghost' | 'plain'
 
@@ -75,21 +75,21 @@ export function MagneticButton({
     'aria-label': rest['aria-label'],
   }
   const inner = (
-    <motion.span className="relative inline-flex items-center gap-2" style={active ? { x: ix, y: iy } : undefined}>
+    <m.span className="relative inline-flex items-center gap-2" style={active ? { x: ix, y: iy } : undefined}>
       {children}
-    </motion.span>
+    </m.span>
   )
 
   if (to) return <MotionLink to={to} {...shared}>{inner}</MotionLink>
   if (href)
     return (
-      <motion.a href={href} {...shared} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+      <m.a href={href} {...shared} {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
         {inner}
-      </motion.a>
+      </m.a>
     )
   return (
-    <motion.button type={type} {...shared}>
+    <m.button type={type} {...shared}>
       {inner}
-    </motion.button>
+    </m.button>
   )
 }

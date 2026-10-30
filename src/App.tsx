@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { LazyMotion } from 'framer-motion'
 import { Cursor, refreshCursor } from './components/Cursor'
 import { Grain } from './components/Grain'
 import { Loader } from './components/Loader'
@@ -12,6 +13,7 @@ import { startSmoothScroll } from './lib/smooth'
 import Home from './pages/Home'
 
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
+const motionFeatures = () => import('./lib/motionFeatures').then((m) => m.default)
 
 function Shell() {
   const { setReady, setDone } = useIntro()
@@ -60,14 +62,16 @@ function Shell() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <IntroProvider>
-        <TransitionProvider>
-          <FlightProvider>
-            <Shell />
-          </FlightProvider>
-        </TransitionProvider>
-      </IntroProvider>
-    </BrowserRouter>
+    <LazyMotion features={motionFeatures} strict>
+      <BrowserRouter>
+        <IntroProvider>
+          <TransitionProvider>
+            <FlightProvider>
+              <Shell />
+            </FlightProvider>
+          </TransitionProvider>
+        </IntroProvider>
+      </BrowserRouter>
+    </LazyMotion>
   )
 }
