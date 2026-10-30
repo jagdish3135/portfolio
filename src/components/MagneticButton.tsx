@@ -27,7 +27,7 @@ type Props = {
 const base =
   'relative inline-flex items-center justify-center gap-2 rounded-full select-none whitespace-nowrap transition-colors duration-300'
 const variants: Record<Variant, string> = {
-  primary: 'h-12 px-6 bg-accent text-bg font-semibold text-[15px] hover:bg-ink',
+  primary: 'h-12 px-6 bg-accent text-on-accent font-semibold text-[15px] hover:bg-ink hover:text-bg',
   ghost: 'h-12 px-6 border border-line text-ink font-medium text-[15px] hover:border-ink/60 hover:bg-ink/5',
   plain: 'px-1 py-1 text-ink',
 }

@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react'
 import { useLocation, useNavigationType } from 'react-router-dom'
+import { Intro } from '../sections/Intro'
 import { Hero } from '../sections/Hero'
 import { About } from '../sections/About'
 import { WhatIDo } from '../sections/WhatIDo'
@@ -37,6 +38,7 @@ export default function Home() {
 
   return (
     <>
+      <Intro />
       <Hero />
       <About />
       <WhatIDo />

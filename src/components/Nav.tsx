@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { usePageTransition } from '../lib/transition'
 import { m, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
+import { ThemeToggle } from './ThemeToggle'
 import { useIntro } from '../lib/intro'
 import { scrollTo } from '../lib/smooth'
 import { DUR, EASE_BEZIER } from '../lib/motion'
@@ -63,7 +64,7 @@ export function Nav() {
         <div
           className={`absolute inset-0 -z-10 transition-opacity duration-500 ${scrolled ? 'opacity-100' : 'opacity-0'}`}
           style={{
-            background: 'linear-gradient(to bottom, rgb(11 11 15 / 0.85), rgb(11 11 15 / 0))',
+            background: 'linear-gradient(to bottom, color-mix(in srgb, var(--bg) 85%, transparent), transparent)',
             backdropFilter: 'blur(6px)',
             maskImage: 'linear-gradient(to bottom, black 55%, transparent)',
           }}
@@ -111,6 +112,7 @@ export function Nav() {
               <span className="pulse-dot" aria-hidden="true" />
               Available for work
             </span>
+            <ThemeToggle />
             <button
               type="button"
               className="inline-flex h-10 items-center rounded-full border border-line px-4 text-[14px] md:hidden"

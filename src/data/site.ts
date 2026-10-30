@@ -12,4 +12,6 @@ export const site = {
   },
   /** Path to a PDF in /public, e.g. '/jagdish-patil-resume.pdf'. Hidden while null. */
   resume: null as string | null,
+  /** Portrait for the intro, a path without extension (.avif + .webp), e.g. '/me/portrait'. A monogram shows while null. */
+  portrait: null as string | null,
 }

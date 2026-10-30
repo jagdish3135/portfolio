@@ -118,7 +118,7 @@ export function Contact() {
                 aria-label={copied ? 'Email address copied' : `Copy email address ${site.email}`}
               >
                 <span className="tabular">{site.email}</span>
-                <span className="rounded-full bg-bg/90 px-2.5 py-0.5 text-[12px] font-semibold text-accent">
+                <span className="rounded-full bg-on-accent/90 px-2.5 py-0.5 text-[12px] font-semibold text-[#c6ff3d]">
                   {copied ? 'Copied ✓' : 'Copy'}
                 </span>
               </MagneticButton>
@@ -176,9 +176,9 @@ export function Contact() {
                 animate={{ y: 0, opacity: 1, scale: 1 }}
                 exit={{ y: 16, opacity: 0 }}
                 transition={{ duration: DUR.fast * 1.4, ease: EASE_BEZIER }}
-                className="flex items-center gap-2.5 rounded-full border border-line bg-bg/95 px-5 py-3 text-[14px] text-ink shadow-[0_20px_40px_-20px_rgb(0_0_0/0.9)] backdrop-blur"
+                className="flex items-center gap-2.5 rounded-full border border-line bg-bg/95 px-5 py-3 text-[14px] text-ink shadow-[0_20px_40px_-20px_var(--shadow)] backdrop-blur"
               >
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-accent text-[11px] font-bold text-bg" aria-hidden="true">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-accent text-[11px] font-bold text-on-accent" aria-hidden="true">
                   ✓
                 </span>
                 Email copied. Paste it anywhere.

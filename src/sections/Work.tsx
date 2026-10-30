@@ -6,6 +6,7 @@ import { projects, more, pad } from '../data/projects'
 import { gsap, ScrollTrigger } from '../lib/motion'
 import { getLenis } from '../lib/smooth'
 import { useMedia } from '../lib/device'
+import { accentFor, useTheme } from '../lib/theme'
 
 /** Desktop pointer + motion allowed → the pinned 3D stack. Everything else → a plain list. */
 const STACK_QUERY = '(min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)'
@@ -50,6 +51,7 @@ function StackedWork() {
   const dims = useRef<HTMLElement[]>([])
   const stRef = useRef<ScrollTrigger | null>(null)
   const [active, setActive] = useState(0)
+  const theme = useTheme()
   const n = projects.length
 
   useLayoutEffect(() => {
@@ -132,7 +134,7 @@ function StackedWork() {
                 >
                   <span
                     className="h-px transition-all duration-500"
-                    style={{ width: i === active ? 18 : 8, background: i === active ? p.accent : 'currentColor' }}
+                    style={{ width: i === active ? 18 : 8, background: i === active ? accentFor(p.accent, theme) : 'currentColor' }}
                     aria-hidden="true"
                   />
                   {p.name}

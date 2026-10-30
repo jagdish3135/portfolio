@@ -32,7 +32,7 @@ export function About() {
 
       <div className="grid-12 mt-14 gap-y-8 md:mt-20">
         <FadeUp className="col-span-12 md:col-span-6 md:col-start-4">
-          <div className="relative overflow-hidden rounded-2xl border border-line bg-[linear-gradient(140deg,rgb(255_255_255/0.06),rgb(255_255_255/0.01)_60%)] p-6 md:p-8">
+          <div className="relative overflow-hidden rounded-2xl border border-line bg-[linear-gradient(140deg,var(--glass-1),var(--glass-2)_60%)] p-6 md:p-8">
             <p className="label flex items-center gap-2.5 text-ink/85">
               <span className="pulse-dot" aria-hidden="true" />
               Currently

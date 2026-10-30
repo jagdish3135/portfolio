@@ -4,15 +4,21 @@ import { FadeUp } from '../components/Reveal'
 import { toolkit, usedInLabel, type ToolGroup } from '../data/toolkit'
 import { projects } from '../data/projects'
 import { isTouch, prefersReducedMotion } from '../lib/device'
+import { accentFor, useTheme, type Theme } from '../lib/theme'
 
 const nameOf = (id: string) => projects.find((p) => p.slug === id)?.name ?? usedInLabel[id] ?? id
-const colourOf = (id: string) => projects.find((p) => p.slug === id)?.accent ?? (id === 'site' ? '#c6ff3d' : '#8e8e97')
+const colourOf = (id: string, theme: Theme) => {
+  const p = projects.find((x) => x.slug === id)
+  if (p) return accentFor(p.accent, theme)
+  return id === 'site' ? 'var(--accent-text)' : 'var(--mute)'
+}
 
 /** One glass panel per group. It leans toward the pointer; hovering a tool names where it's used. */
 function Panel({ group, index }: { group: ToolGroup; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const [tilt] = useState(() => !isTouch() && !prefersReducedMotion())
   const [active, setActive] = useState<string | null>(null)
+  const theme = useTheme()
   const current = group.tools.find((t) => t.name === active)
 
   const onMove = (e: PointerEvent) => {
@@ -49,7 +55,7 @@ function Panel({ group, index }: { group: ToolGroup; index: number }) {
               <span className="text-[15px]">{t.name}</span>
               <span className="flex shrink-0 items-center gap-1" aria-hidden="true">
                 {t.usedIn.map((id) => (
-                  <span key={id} className="h-1.5 w-1.5 rounded-full" style={{ background: colourOf(id) }} />
+                  <span key={id} className="h-1.5 w-1.5 rounded-full" style={{ background: colourOf(id, theme) }} />
                 ))}
               </span>
             </li>

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { getProject, pad, projects, type CaseStudy, type Project } from '../data/projects'
 import { loadCaseStudy } from '../data/loadCaseStudy'
 import { useFlight } from '../lib/flight'
+import { accentFor, useTheme } from '../lib/theme'
 import { gsap, ScrollTrigger, DUR, EASE, STAGGER } from '../lib/motion'
 import { getLenis } from '../lib/smooth'
 import { setMeta } from '../lib/meta'
@@ -59,6 +60,7 @@ function Paragraphs({ items, lead }: { items: string[]; lead?: boolean }) {
 }
 
 function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
+  const theme = useTheme()
   const wide = cs.features.filter((f) => f.shape === 'wide')
   const tall = cs.features.filter((f) => f.shape === 'tall')
   return (
@@ -73,7 +75,7 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
           <FadeUp as="ul" className="mt-10 grid gap-x-8 gap-y-3 border-t border-line pt-8 md:grid-cols-2">
             {cs.builtList.map((b) => (
               <li key={b} className="flex gap-3 text-[16px] leading-relaxed">
-                <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: p.accent }} aria-hidden="true" />
+                <span className="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: accentFor(p.accent, theme) }} aria-hidden="true" />
                 {b}
               </li>
             ))}
@@ -96,7 +98,7 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
           </SplitReveal>
         </div>
         <div className="mt-12 rounded-[24px] border border-line bg-surface/50 p-4 md:mt-16 md:p-8">
-          <ArchDiagram diagram={cs.diagram} accent={p.accent} label={`${p.name} architecture: ${cs.how.map((h) => h.title).join(', then ')}.`} />
+          <ArchDiagram diagram={cs.diagram} accent={accentFor(p.accent, theme)} label={`${p.name} architecture: ${cs.how.map((h) => h.title).join(', then ')}.`} />
           <p className="mt-3 text-[13px] text-mute md:hidden">Scroll the diagram sideways →</p>
         </div>
         <ol className="grid-12 mt-12 gap-y-8 md:mt-16">
@@ -160,7 +162,7 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
           <Paragraphs items={cs.hardest.solution} />
         </div>
         {cs.hardest.code && (
-          <FadeUp className="mt-10 overflow-hidden rounded-[18px] border border-line bg-[#0f0f14]">
+          <FadeUp className="mt-10 overflow-hidden rounded-[18px] border border-line bg-[var(--code-bg)]">
             <p className="flex items-center justify-between border-b border-line px-5 py-3 text-[13px] text-mute">
               <span className="font-mono">{cs.hardest.code.file}</span>
               <span className="label">From the repo</span>
@@ -188,6 +190,7 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
 
 function ProjectView({ p }: { p: Project }) {
   const { land } = useFlight()
+  const theme = useTheme()
   const root = useRef<HTMLElement>(null)
   const coverRef = useRef<HTMLDivElement>(null)
   const [coverHidden, setCoverHidden] = useState(false)
@@ -227,7 +230,7 @@ function ProjectView({ p }: { p: Project }) {
   }, [p.slug, p.name, p.summary, land])
 
   return (
-    <article ref={root} style={{ ['--accent' as string]: p.accent }} aria-labelledby="project-title">
+    <article ref={root} aria-labelledby="project-title">
       <header className="container-x pt-32 md:pt-40">
         <div className="grid-12 gap-y-6">
           <p data-detail-fade className="label col-span-12 flex items-center gap-3 text-mute md:col-span-3 md:pt-4">
@@ -253,10 +256,10 @@ function ProjectView({ p }: { p: Project }) {
       </header>
 
       <div className="container-x mt-12 md:mt-16">
-        <div className="rounded-[28px] p-[clamp(12px,3.2vw,48px)]" style={{ background: p.accent }}>
+        <div className="rounded-[28px] p-[clamp(12px,3.2vw,48px)]" style={{ background: accentFor(p.accent, theme) }}>
           <div
             ref={coverRef}
-            className="aspect-[16/10] overflow-hidden rounded-[16px] bg-[#15151a] shadow-[0_40px_80px_-30px_rgb(0_0_0/0.6)]"
+            className="aspect-[16/10] overflow-hidden rounded-[16px] bg-[var(--media-bg)] shadow-[0_40px_80px_-30px_var(--shadow)]"
             style={{ opacity: coverHidden ? 0 : 1 }}
           >
             <picture>

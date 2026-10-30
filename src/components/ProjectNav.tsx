@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { neighbours, type Project } from '../data/projects'
 import { TransitionLink } from '../lib/transition'
+import { accentFor, useTheme } from '../lib/theme'
 import { isTouch, prefersReducedMotion } from '../lib/device'
 
 /**
@@ -9,6 +10,7 @@ import { isTouch, prefersReducedMotion } from '../lib/device'
  */
 export function ProjectNav({ slug }: { slug: string }) {
   const { prev, next } = neighbours(slug)
+  const theme = useTheme()
   const [hovered, setHovered] = useState<Project | null>(null)
   // Which side the preview sits on, so it never covers the name being hovered.
   const side = useRef<'left' | 'right'>('left')
@@ -62,7 +64,7 @@ export function ProjectNav({ slug }: { slug: string }) {
         className={`mt-4 block font-display font-medium leading-[0.9] tracking-[-0.03em] transition-colors duration-500 group-hover:text-[var(--hover)] ${
           dir === 'next' ? 'text-[clamp(48px,9vw,150px)]' : 'text-[clamp(32px,4.4vw,72px)] text-ink/80'
         }`}
-        style={{ ['--hover' as string]: p.accent === '#F4F4F2' ? '#ffffff' : p.accent }}
+        style={{ ['--hover' as string]: accentFor(p.accent, theme) }}
       >
         {p.name}
       </span>
@@ -87,8 +89,8 @@ export function ProjectNav({ slug }: { slug: string }) {
           {[prev, next].map((p) => (
             <div
               key={p.slug}
-              className="absolute inset-x-0 top-0 aspect-[16/10] overflow-hidden rounded-2xl border border-line shadow-[0_40px_80px_-30px_rgb(0_0_0/0.9)] transition-opacity duration-300"
-              style={{ opacity: hovered?.slug === p.slug ? 1 : 0, outline: `1px solid ${p.accent}`, outlineOffset: 6 }}
+              className="absolute inset-x-0 top-0 aspect-[16/10] overflow-hidden rounded-2xl border border-line shadow-[0_40px_80px_-30px_var(--shadow)] transition-opacity duration-300"
+              style={{ opacity: hovered?.slug === p.slug ? 1 : 0, outline: `1px solid ${accentFor(p.accent, theme)}`, outlineOffset: 6 }}
             >
               <picture>
                 <source srcSet={`${p.media.desktop}.avif`} type="image/avif" />

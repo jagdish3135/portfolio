@@ -8,7 +8,17 @@
     <meta name="description" content="Jagdish Patil builds AI agents and web apps, AI-assisted, and ships them live. An AI-native builder in Surat, India, working toward Forward Deployed Engineering." />
     <!-- /meta -->
     <meta name="theme-color" content="#0B0B0F" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      // Apply the saved theme (or ?theme=light) before first paint. Dark is the default.
+      try {
+        var t = new URLSearchParams(location.search).get("theme") || localStorage.getItem("theme")
+        if (t === "light") {
+          document.documentElement.dataset.theme = "light"
+          document.querySelector("meta[name=theme-color]").setAttribute("content", "#f3f2ee")
+        }
+      } catch (e) {}
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
 

@@ -2,7 +2,8 @@ import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'rea
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Studio as StudioLights } from './primitives'
 import * as THREE from 'three'
-import { PanelStack } from './PanelStack'
+import { PanelStack, PALETTES, PaletteContext, type Palette } from './PanelStack'
+import { useTheme } from '../lib/theme'
 
 type Tier = 'full' | 'lite'
 type Drag = { active: boolean; lastX: number; rot: number }
@@ -58,25 +59,25 @@ function Rig({ tier, ready, drag }: { tier: Tier; ready: boolean; drag: MutableR
 }
 
 /** A dark backdrop with a soft glow behind the object. Glass needs an opaque scene to refract. */
-function Backdrop() {
+function Backdrop({ pal }: { pal: Palette }) {
   const { viewport } = useThree()
   const tex = useMemo(() => {
     const c = document.createElement('canvas')
     c.width = c.height = 512
     const g = c.getContext('2d')!
     const grad = g.createRadialGradient(256, 256, 0, 256, 256, 256)
-    grad.addColorStop(0, '#1a1a21')
-    grad.addColorStop(0.55, '#111116')
-    grad.addColorStop(1, '#0b0b0f')
+    grad.addColorStop(0, pal.glow[0])
+    grad.addColorStop(0.55, pal.glow[1])
+    grad.addColorStop(1, pal.glow[2])
     g.fillStyle = grad
     g.fillRect(0, 0, 512, 512)
     const t = new THREE.CanvasTexture(c)
     t.colorSpace = THREE.SRGBColorSpace
     return t
-  }, [])
+  }, [pal])
   return (
     <>
-      <color attach="background" args={['#0b0b0f']} />
+      <color attach="background" args={[pal.bg]} />
       <mesh position={[viewport.width * 0.16, viewport.height * 0.08, -4]} scale={[viewport.width * 1.3, viewport.width * 1.3, 1]}>
         <planeGeometry />
         <meshBasicMaterial map={tex} toneMapped={false} />
@@ -89,18 +90,19 @@ const STUDIO = [
   { form: 'rect' as const, intensity: 2.6, position: [0, 4, 2] as [number, number, number], rotation: [Math.PI / 2, 0, 0] as [number, number, number], scale: [8, 3, 1] as [number, number, number] },
   { form: 'rect' as const, intensity: 2, position: [-5, 0.5, 1] as [number, number, number], rotation: [0, Math.PI / 2, 0] as [number, number, number], scale: [1.2, 6, 1] as [number, number, number] },
   { form: 'rect' as const, intensity: 1.4, position: [5, -0.5, 0] as [number, number, number], rotation: [0, -Math.PI / 2, 0] as [number, number, number], scale: [1.2, 6, 1] as [number, number, number] },
-  { form: 'ring' as const, intensity: 0.8, color: '#c6ff3d', position: [3, 2.5, 4] as [number, number, number], scale: 1.2 },
+  { form: 'ring' as const, intensity: 0.8, color: 'RING', position: [3, 2.5, 4] as [number, number, number], scale: 1.2 },
   { form: 'rect' as const, intensity: 0.5, position: [0, -4, 1] as [number, number, number], rotation: [-Math.PI / 2, 0, 0] as [number, number, number], scale: [6, 2, 1] as [number, number, number] },
 ]
 
 /** Studio lighting made in code, so no HDR file is downloaded. */
-function Studio() {
-  return (
-    <StudioLights lights={STUDIO} />
-  )
+function Studio({ pal }: { pal: Palette }) {
+  // The ring light picks up the theme's lime; memoised so the environment map is only rebuilt on a theme change.
+  const lights = useMemo(() => STUDIO.map((l) => (l.color === 'RING' ? { ...l, color: pal.ring } : l)), [pal])
+  return <StudioLights lights={lights} />
 }
 
 export default function Scene3D({ tier, ready, onReady }: { tier: Tier; ready: boolean; onReady?: () => void }) {
+  const pal = PALETTES[useTheme()]
   const wrap = useRef<HTMLDivElement>(null)
   const drag = useRef<Drag>({ active: false, lastX: 0, rot: 0 })
   const [running, setRunning] = useState(true)
@@ -154,9 +156,11 @@ export default function Scene3D({ tier, ready, onReady }: { tier: Tier; ready: b
         gl={{ antialias: true, alpha: false, powerPreference: 'high-performance', preserveDrawingBuffer: import.meta.env.DEV }}
         onCreated={() => onReady?.()}
       >
-        <Backdrop />
-        <Studio />
-        <Rig tier={tier} ready={ready} drag={drag} />
+        <PaletteContext.Provider value={pal}>
+          <Backdrop pal={pal} />
+          <Studio pal={pal} />
+          <Rig tier={tier} ready={ready} drag={drag} />
+        </PaletteContext.Provider>
       </Canvas>
     </div>
   )

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type MouseEvent, type PointerEvent, type F
 import { Link, useNavigate } from 'react-router-dom'
 import { pad, type Project } from '../data/projects'
 import { useFlight } from '../lib/flight'
+import { accentFor, useTheme } from '../lib/theme'
 import { isTouch, prefersReducedMotion } from '../lib/device'
 
 /** Desktop stack: about 62vw wide. Grid on tablets: half the width. Phones: full width. */
@@ -22,6 +23,7 @@ type Props = {
  */
 export function ProjectCard({ project: p, index, variant, eager, onFocus }: Props) {
   const navigate = useNavigate()
+  const brand = accentFor(p.accent, useTheme())
   const { takeOff } = useFlight()
   const cardRef = useRef<HTMLAnchorElement>(null)
   const mediaRef = useRef<HTMLDivElement>(null)
@@ -95,7 +97,7 @@ export function ProjectCard({ project: p, index, variant, eager, onFocus }: Prop
       data-cursor="view"
       data-card={p.slug}
       className="project-card group block"
-      style={{ ['--accent' as string]: p.accent }}
+      style={{ ['--brand' as string]: brand }}
       aria-label={`${p.name}: ${p.pitch}`}
     >
       <article className="project-card__panel">
@@ -141,7 +143,7 @@ export function ProjectCard({ project: p, index, variant, eager, onFocus }: Prop
           <div className="min-w-0">
             <p className="label flex items-center gap-2.5 text-mute">
               <span className="tabular text-ink/85">{pad(index)}</span>
-              <span className="h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} aria-hidden="true" />
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: brand }} aria-hidden="true" />
               {p.year}
             </p>
             <h3 className="mt-2 font-display text-[clamp(26px,2.6vw,40px)] font-medium leading-none tracking-[-0.02em]">

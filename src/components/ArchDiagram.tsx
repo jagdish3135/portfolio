@@ -17,6 +17,9 @@ const PAD = 14
 
 type Box = { x: number; y: number; w: number; h: number; node: DiagramNode; lane: number }
 
+/** The page's text colour at a given strength, so the diagram follows the theme. */
+const ink = (a: number) => `color-mix(in srgb, var(--ink) ${Math.round(a * 100)}%, transparent)`
+
 /** Squeezes text that would overflow its box (a rough width estimate per character). */
 const fit = (text: string, perChar: number, room: number) =>
   text.length * perChar > room ? { textLength: room, lengthAdjust: 'spacingAndGlyphs' as const } : {}
@@ -101,14 +104,14 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
         <title id="arch-title">{label}</title>
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M0 1 L9 5 L0 9" fill="none" stroke="rgb(237 237 237 / 0.55)" strokeWidth="1.4" />
+            <path d="M0 1 L9 5 L0 9" fill="none" style={{ stroke: ink(0.55) }} strokeWidth="1.4" />
           </marker>
         </defs>
 
         {lanes.map((lane, i) => (
           <g key={lane.title} data-fade>
-            {i > 0 && <line x1={i * laneW} y1={8} x2={i * laneW} y2={TOP + bodyH + 10} stroke="rgb(237 237 237 / 0.06)" />}
-            <text x={i * laneW + PAD} y={24} fill="#8e8e97" fontSize="11.5" letterSpacing="0.08em" fontWeight="500">
+            {i > 0 && <line x1={i * laneW} y1={8} x2={i * laneW} y2={TOP + bodyH + 10} style={{ stroke: ink(0.06) }} />}
+            <text x={i * laneW + PAD} y={24} style={{ fill: 'var(--mute)' }} fontSize="11.5" letterSpacing="0.08em" fontWeight="500">
               {lane.title.toUpperCase()}
             </text>
           </g>
@@ -119,7 +122,7 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
             <path
               d={p.d}
               fill="none"
-              stroke="rgb(237 237 237 / 0.4)"
+              style={{ stroke: ink(0.4) }}
               strokeWidth="1.3"
               markerEnd="url(#arrow)"
               {...(p.dashed
@@ -134,13 +137,12 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
                   width={p.label.length * 6.4 + 14}
                   height={20}
                   rx={10}
-                  fill="#0b0b0f"
-                  stroke="rgb(237 237 237 / 0.15)"
+                  style={{ fill: 'var(--bg)', stroke: ink(0.15) }}
                 />
                 <text
                   x={p.labelAt === 'side' ? p.mid.x + 15 : p.mid.x}
                   y={p.mid.y + 4}
-                  fill="#8e8e97"
+                  style={{ fill: 'var(--mute)' }}
                   fontSize="11"
                   textAnchor={p.labelAt === 'side' ? 'start' : 'middle'}
                 >
@@ -159,16 +161,15 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
               width={w}
               height={h}
               rx={12}
-              fill={node.accent ? accent : 'rgb(255 255 255 / 0.03)'}
+              style={{ fill: node.accent ? accent : ink(0.03), stroke: node.accent ? accent : ink(0.16) }}
               fillOpacity={node.accent ? 0.1 : 1}
-              stroke={node.accent ? accent : 'rgb(237 237 237 / 0.16)'}
               strokeOpacity={node.accent ? 0.75 : 1}
             />
-            <text x={x + 14} y={y + 28} fill="#ededed" fontSize="15" fontWeight="600" {...fit(node.label, 8.4, w - 28)}>
+            <text x={x + 14} y={y + 28} style={{ fill: 'var(--ink)' }} fontSize="15" fontWeight="600" {...fit(node.label, 8.4, w - 28)}>
               {node.label}
             </text>
             {node.sub && (
-              <text x={x + 14} y={y + 48} fill="#8e8e97" fontSize="11.5" {...fit(node.sub, 6.1, w - 28)}>
+              <text x={x + 14} y={y + 48} style={{ fill: 'var(--mute)' }} fontSize="11.5" {...fit(node.sub, 6.1, w - 28)}>
                 {node.sub}
               </text>
             )}
@@ -181,7 +182,7 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
               const li = band.lanes[0] + k
               const lowest = [...boxes.values()].filter((b) => b.lane === li).sort((a, b) => b.y - a.y)[0]
               const x = li * laneW + laneW / 2
-              return <line key={li} x1={x} y1={lowest.y + lowest.h} x2={x} y2={bandY} stroke="rgb(237 237 237 / 0.25)" strokeDasharray="3 4" />
+              return <line key={li} x1={x} y1={lowest.y + lowest.h} x2={x} y2={bandY} style={{ stroke: ink(0.25) }} strokeDasharray="3 4" />
             })}
             <rect
               x={band.lanes[0] * laneW + PAD}
@@ -189,15 +190,14 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
               width={(band.lanes[1] - band.lanes[0] + 1) * laneW - PAD * 2}
               height={54}
               rx={12}
-              fill="rgb(255 255 255 / 0.03)"
-              stroke="rgb(237 237 237 / 0.16)"
+              style={{ fill: ink(0.03), stroke: ink(0.16) }}
               strokeDasharray="5 5"
             />
-            <text x={band.lanes[0] * laneW + PAD + 16} y={bandY + 23} fill="#ededed" fontSize="13.5" fontWeight="600">
+            <text x={band.lanes[0] * laneW + PAD + 16} y={bandY + 23} style={{ fill: 'var(--ink)' }} fontSize="13.5" fontWeight="600">
               {band.label}
             </text>
             {band.sub && (
-              <text x={band.lanes[0] * laneW + PAD + 16} y={bandY + 41} fill="#8e8e97" fontSize="11.5">
+              <text x={band.lanes[0] * laneW + PAD + 16} y={bandY + 41} style={{ fill: 'var(--mute)' }} fontSize="11.5">
                 {band.sub}
               </text>
             )}

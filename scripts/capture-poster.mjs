@@ -4,17 +4,18 @@
 // Usage: start the dev server (npm run dev), then: node scripts/capture-poster.mjs
 import { chromium } from 'playwright'
 
-const URL = process.env.URL ?? 'http://localhost:5220/?scene=full'
+let URL = process.env.URL ?? 'http://localhost:5220/?scene=full'
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
 
 async function shot(width, height, file, opts = {}) {
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 })
   await page.goto(URL, { waitUntil: 'networkidle' })
   await page.waitForSelector('[data-loader]', { state: 'detached', timeout: 15000 })
-  await page.waitForTimeout(2500) // let the layers settle apart
+  await page.evaluate(() => document.getElementById('hero')?.scrollIntoView())
+  await page.waitForTimeout(3500) // let the layers settle apart
   if (opts.sceneOnly) {
     // Poster: the canvas alone, without the page copy on top.
-    const data = await page.evaluate(() => document.querySelector('canvas').toDataURL('image/webp', 0.86))
+    const data = await page.evaluate(() => document.querySelector('#hero canvas').toDataURL('image/webp', 0.86))
     const fs = await import('node:fs')
     fs.writeFileSync(file, Buffer.from(data.split(',')[1], 'base64'))
   } else {
@@ -25,6 +26,10 @@ async function shot(width, height, file, opts = {}) {
   console.log('saved', file)
 }
 
+// Both themes. (Share images are made by scripts/og.mjs.)
+const base = URL
+URL = base + '&theme=dark'
 await shot(1600, 1000, 'public/hero-poster.webp', { sceneOnly: true })
-await shot(1200, 630, 'public/og.png')
+URL = base + '&theme=light'
+await shot(1600, 1000, 'public/hero-poster-light.webp', { sceneOnly: true })
 await browser.close()
