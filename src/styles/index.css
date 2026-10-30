@@ -1,0 +1,372 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0b0b0f;
+  --color-surface: #131318;
+  --color-ink: #ededed;
+  --color-mute: #8e8e97;
+  --color-faint: #4a4a52;
+  --color-line: rgb(237 237 237 / 0.1);
+  --color-accent: #c6ff3d;
+
+  --font-display: "Clash Display", "Inter Variable", system-ui, sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  --gutter: clamp(16px, 3vw, 40px);
+  --col-gap: clamp(12px, 1.6vw, 24px);
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  scrollbar-color: #2a2a31 var(--color-bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+html.is-loading {
+  overflow: hidden;
+}
+
+/* Layout primitives: a strict 12-column grid inside a padded container */
+.container-x {
+  width: 100%;
+  max-width: 1680px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+}
+
+.label {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Masked line reveal */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.line-mask > span {
+  display: block;
+  will-change: transform;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: -60px;
+  z-index: 10001;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
+/* Grain overlay */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -1%); }
+  80% { transform: translate(3%, 3%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Availability pulse */
+.pulse-dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: pulse 2s var(--ease-expo) infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* ---------- Custom cursor ---------- */
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none !important;
+}
+.has-custom-cursor input,
+.has-custom-cursor textarea,
+.has-custom-cursor [contenteditable="true"] {
+  cursor: text !important;
+}
+
+.cursor-pos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  will-change: transform;
+  mix-blend-mode: difference;
+  transition: opacity 0.3s;
+}
+.cursor-pos[data-hidden="true"] {
+  opacity: 0;
+}
+
+.cursor-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.3s var(--ease-expo), opacity 0.2s;
+}
+.cursor-pos[data-mode="link"] .cursor-dot,
+.cursor-pos[data-mode="view"] .cursor-dot,
+.cursor-pos[data-mode="drag"] .cursor-dot,
+.cursor-pos[data-mode="text"] .cursor-dot,
+.cursor-pos[data-mode="native"] .cursor-dot {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.cursor-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--w, 36px);
+  height: var(--h, 36px);
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 0.85);
+  border-radius: 999px;
+  transform: translate(-50%, -50%) scale(var(--s, 1));
+  transition:
+    width 0.45s var(--ease-expo),
+    height 0.45s var(--ease-expo),
+    border-radius 0.45s var(--ease-expo),
+    background-color 0.3s,
+    border-color 0.3s,
+    transform 0.25s var(--ease-expo),
+    opacity 0.25s;
+}
+.cursor-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s, transform 0.35s var(--ease-expo);
+}
+
+/* over links and buttons: the ring grows */
+.cursor-pos[data-mode="link"] .cursor-ring {
+  --w: 60px;
+  --h: 60px;
+  background: rgb(255 255 255 / 0.08);
+}
+
+/* over project cards: an accent pill. Solid colour, so no blend */
+.cursor-pos[data-mode="view"] {
+  mix-blend-mode: normal;
+}
+.cursor-pos[data-mode="view"] .cursor-ring {
+  --w: 104px;
+  --h: 42px;
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.cursor-pos[data-mode="view"] .cursor-label {
+  color: var(--color-bg);
+}
+
+/* over the 3D scene */
+.cursor-pos[data-mode="drag"] .cursor-ring {
+  --w: 78px;
+  --h: 78px;
+}
+.cursor-pos[data-mode="view"] .cursor-label,
+.cursor-pos[data-mode="drag"] .cursor-label {
+  opacity: 1;
+  transform: none;
+}
+
+/* over text: a thin caret, sized to the text under it */
+.cursor-pos[data-mode="text"] .cursor-ring {
+  --w: 2px;
+  --h: var(--caret, 26px);
+  border-radius: 1px;
+  border-color: transparent;
+  background: #fff;
+}
+
+/* over inputs: let the native I-beam show */
+.cursor-pos[data-mode="native"] .cursor-ring {
+  opacity: 0;
+}
+
+.cursor-pos[data-pressed="true"] .cursor-ring {
+  --s: 0.82;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring,
+  .cursor-dot,
+  .cursor-label {
+    transition-duration: 0.12s !important;
+  }
+  .grain {
+    animation: none;
+  }
+  .pulse-dot::after {
+    animation: none;
+  }
+}
+
+/* ---------- Glass stack (CSS 3D icon) ---------- */
+.glass-stack {
+  --size: 150px;
+  --gap: 28px;
+  width: calc(var(--size) * 1.55);
+  height: calc(var(--size) * 1.45);
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+}
+.glass-stack__float {
+  width: var(--size);
+  height: var(--size);
+  transform-style: preserve-3d;
+  animation: stack-float 7s ease-in-out infinite;
+}
+.glass-stack__tilt {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(56deg + var(--tilt-y, 0deg))) rotateZ(calc(-40deg + var(--tilt-x, 0deg)));
+  transition: transform 0.8s var(--ease-expo);
+}
+.glass-stack__pane {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  border: 1px solid rgb(237 237 237 / 0.2);
+  background: linear-gradient(140deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.015) 55%, rgb(255 255 255 / 0.05));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 18px 30px -18px rgb(0 0 0 / 0.9);
+  color: rgb(237 237 237 / 0.55);
+  transform: translateZ(calc(var(--i) * var(--gap)));
+  transition:
+    transform 0.8s var(--ease-expo),
+    border-color 0.5s,
+    color 0.5s;
+}
+.glass-stack__pane svg {
+  width: 100%;
+  height: 100%;
+  padding: 12%;
+  overflow: visible;
+}
+.glass-stack__pane.is-top {
+  color: rgb(237 237 237 / 0.9);
+  border-color: rgb(237 237 237 / 0.35);
+}
+.glass-stack .accent {
+  color: var(--color-accent);
+  stroke: var(--color-accent);
+}
+.glass-stack .accent-fill {
+  fill: var(--color-accent);
+  stroke: none;
+}
+.group:hover .glass-stack,
+.group:focus-within .glass-stack {
+  --gap: 42px;
+}
+.group:hover .glass-stack__pane.is-top,
+.group:focus-within .glass-stack__pane.is-top {
+  border-color: rgb(198 255 61 / 0.7);
+}
+@keyframes stack-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-stack__float {
+    animation: none;
+  }
+  .glass-stack__tilt,
+  .glass-stack__pane {
+    transition-duration: 0.2s;
+  }
+}
