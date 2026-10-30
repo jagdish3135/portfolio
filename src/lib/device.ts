@@ -1,3 +1,5 @@
+import { useSyncExternalStore } from 'react'
+
 const mq = (q: string) => typeof window !== 'undefined' && window.matchMedia(q).matches
 
 /** True on phones and tablets: no hover, or a coarse pointer. */
@@ -32,4 +34,18 @@ export function getSceneTier(): SceneTier {
   if (small && (memory <= 4 || cores <= 4)) return 'static'
   if (small) return 'lite'
   return 'full'
+}
+
+
+/** Live result of a media query. */
+export function useMedia(query: string) {
+  return useSyncExternalStore(
+    (cb) => {
+      const m = window.matchMedia(query)
+      m.addEventListener('change', cb)
+      return () => m.removeEventListener('change', cb)
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  )
 }

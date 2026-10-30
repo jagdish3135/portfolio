@@ -42,6 +42,11 @@ function resolve(target: Element | null): { mode: Mode; label?: string; el?: Ele
   return { mode: 'default' }
 }
 
+/** Re-reads what is under the pointer (after a route change, nothing fires pointerover). */
+export function refreshCursor() {
+  window.dispatchEvent(new Event('cursor:refresh'))
+}
+
 export function Cursor() {
   const [enabled] = useState(() => typeof window !== 'undefined' && !isTouch())
   const dotRef = useRef<HTMLDivElement>(null)
@@ -95,6 +100,7 @@ export function Cursor() {
       }
     }
     const onOver = (e: PointerEvent) => setMode(e.target as Element)
+    const onRefresh = () => setMode(document.elementFromPoint(mouse.x, mouse.y))
     const onDown = () => (ring.dataset.pressed = 'true')
     const onUp = () => (ring.dataset.pressed = 'false')
     const onLeave = () => setHidden(true)
@@ -116,6 +122,7 @@ export function Cursor() {
     window.addEventListener('pointermove', onMove, { passive: true })
     document.addEventListener('pointerover', onOver, { passive: true })
     window.addEventListener('pointerdown', onDown)
+    window.addEventListener('cursor:refresh', onRefresh)
     window.addEventListener('pointerup', onUp)
     document.documentElement.addEventListener('mouseleave', onLeave)
     document.documentElement.addEventListener('mouseenter', onEnter)
@@ -126,6 +133,7 @@ export function Cursor() {
       window.removeEventListener('pointermove', onMove)
       document.removeEventListener('pointerover', onOver)
       window.removeEventListener('pointerdown', onDown)
+      window.removeEventListener('cursor:refresh', onRefresh)
       window.removeEventListener('pointerup', onUp)
       document.documentElement.removeEventListener('mouseleave', onLeave)
       document.documentElement.removeEventListener('mouseenter', onEnter)

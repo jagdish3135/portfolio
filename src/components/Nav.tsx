@@ -1,4 +1,5 @@
 import { useEffect, useState, type MouseEvent } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { useIntro } from '../lib/intro'
@@ -18,6 +19,8 @@ export function Nav() {
   const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     let lastY = window.scrollY
@@ -44,7 +47,8 @@ export function Nav() {
   const go = (href: string) => (e: MouseEvent) => {
     e.preventDefault()
     setOpen(false)
-    scrollTo(href, -40)
+    if (location.pathname === '/') scrollTo(href, -40)
+    else navigate('/', { state: { scrollTo: href } })
   }
 
   return (
