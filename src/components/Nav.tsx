@@ -1,5 +1,6 @@
 import { useEffect, useState, type MouseEvent } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { usePageTransition } from '../lib/transition'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { useIntro } from '../lib/intro'
@@ -20,7 +21,7 @@ export function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const navigate = useNavigate()
+  const go = usePageTransition()
 
   useEffect(() => {
     let lastY = window.scrollY
@@ -44,11 +45,11 @@ export function Nav() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const go = (href: string) => (e: MouseEvent) => {
+  const goTo = (href: string) => (e: MouseEvent) => {
     e.preventDefault()
     setOpen(false)
     if (location.pathname === '/') scrollTo(href, -40)
-    else navigate('/', { state: { scrollTo: href } })
+    else go('/', { scrollTo: href })
   }
 
   return (
@@ -74,7 +75,7 @@ export function Nav() {
             className="col-span-6 md:col-span-3 justify-self-start font-display text-[22px] font-semibold leading-none tracking-tight"
             style={{ opacity: done ? 1 : 0 }}
             aria-label="Jagdish Patil, home"
-            onClick={go('#top')}
+            onClick={goTo('#top')}
           >
             JP
           </a>
@@ -91,7 +92,7 @@ export function Nav() {
                   href={l.href}
                   variant="plain"
                   strength={0.4}
-                  onClick={go(l.href)}
+                  onClick={goTo(l.href)}
                   className="text-[14px] text-ink/80 hover:text-ink"
                 >
                   {l.label}
@@ -136,7 +137,7 @@ export function Nav() {
             <ul className="space-y-2">
               {LINKS.map((l) => (
                 <li key={l.href}>
-                  <a href={l.href} onClick={go(l.href)} className="font-display text-[44px] font-medium leading-tight">
+                  <a href={l.href} onClick={goTo(l.href)} className="font-display text-[44px] font-medium leading-tight">
                     {l.label}
                   </a>
                 </li>

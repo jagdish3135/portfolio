@@ -6,6 +6,7 @@ import { WhatIDo } from '../sections/WhatIDo'
 import { Work } from '../sections/Work'
 import { ScrollTrigger } from '../lib/motion'
 import { getLenis, scrollTo } from '../lib/smooth'
+import { setMeta } from '../lib/meta'
 
 /** Saved when a project card is opened, so Back returns to the same spot. */
 export const HOME_SCROLL_KEY = 'home-scroll'
@@ -15,7 +16,7 @@ export default function Home() {
   const navType = useNavigationType()
 
   useLayoutEffect(() => {
-    document.title = 'Jagdish Patil — AI-native builder, aspiring Forward Deployed Engineer'
+    setMeta('Jagdish Patil — AI-native builder, aspiring Forward Deployed Engineer')
     const target = (location.state as { scrollTo?: string } | null)?.scrollTo
     const saved = sessionStorage.getItem(HOME_SCROLL_KEY)
     if (!target && !(navType === 'POP' && saved)) return

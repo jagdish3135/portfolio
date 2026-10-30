@@ -14,7 +14,7 @@ type Props = {
 export function SectionHeading({ index, label, title, id, className = '' }: Props) {
   return (
     <div className={`grid-12 gap-y-6 ${className}`}>
-      <p className="label col-span-12 flex items-center gap-3 text-mute md:col-span-3 md:pt-3">
+      <p className="label col-span-12 flex items-center gap-3 self-start text-mute md:col-span-3 md:pt-3">
         <span className="tabular text-ink/85">({index})</span>
         <span aria-hidden="true" className="h-px w-6 bg-line" />
         {label}

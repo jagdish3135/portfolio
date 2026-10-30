@@ -6,6 +6,7 @@ import { Loader } from './components/Loader'
 import { Nav } from './components/Nav'
 import { IntroProvider, useIntro } from './lib/intro'
 import { FlightProvider } from './lib/flight'
+import { TransitionProvider } from './lib/transition'
 import { startSmoothScroll } from './lib/smooth'
 import Home from './pages/Home'
 
@@ -59,9 +60,11 @@ export default function App() {
   return (
     <BrowserRouter>
       <IntroProvider>
-        <FlightProvider>
-          <Shell />
-        </FlightProvider>
+        <TransitionProvider>
+          <FlightProvider>
+            <Shell />
+          </FlightProvider>
+        </TransitionProvider>
       </IntroProvider>
     </BrowserRouter>
   )
