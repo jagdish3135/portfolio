@@ -114,8 +114,12 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
           {wide.map((f) => (
             <figure key={f.title}>
               <Zoomable src={f.image} alt={f.alt}>
-                <Parallax className="aspect-[16/10] rounded-[18px] border border-line bg-surface" amount={6}>
-                  <Picture src={f.image} alt={f.alt} width={1600} height={1000} />
+                <Parallax
+                  className="rounded-[18px] border border-line bg-surface"
+                  style={{ aspectRatio: f.size ? `${f.size[0]} / ${f.size[1]}` : '16 / 10' }}
+                  amount={f.still ? 0 : 6}
+                >
+                  <Picture src={f.image} alt={f.alt} width={f.size?.[0] ?? 1600} height={f.size?.[1] ?? 1000} />
                 </Parallax>
               </Zoomable>
               <figcaption className="mt-6 grid gap-2 md:grid-cols-[1fr_1.4fr] md:gap-10">

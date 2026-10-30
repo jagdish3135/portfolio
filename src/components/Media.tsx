@@ -25,11 +25,21 @@ export function Picture({ src, alt, width, height, className = '', fit = 'cover'
 }
 
 /** Moves its image a little slower than the page. Off with reduced motion. */
-export function Parallax({ children, amount = 8, className = '' }: { children: React.ReactNode; amount?: number; className?: string }) {
+export function Parallax({
+  children,
+  amount = 8,
+  className = '',
+  style,
+}: {
+  children: React.ReactNode
+  amount?: number
+  className?: string
+  style?: React.CSSProperties
+}) {
   const outer = useRef<HTMLDivElement>(null)
   const inner = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    if (prefersReducedMotion()) return
+    if (prefersReducedMotion() || amount === 0) return
     const ctx = gsap.context(() => {
       gsap.fromTo(
         inner.current,
@@ -44,8 +54,8 @@ export function Parallax({ children, amount = 8, className = '' }: { children: R
     return () => ctx.revert()
   }, [amount])
   return (
-    <div ref={outer} className={`overflow-hidden ${className}`}>
-      <div ref={inner} className="h-full w-full" style={{ scale: prefersReducedMotion() ? undefined : `${1 + amount / 100}` }}>
+    <div ref={outer} className={`overflow-hidden ${className}`} style={style}>
+      <div ref={inner} className="h-full w-full" style={{ scale: prefersReducedMotion() || amount === 0 ? undefined : `${1 + amount / 100}` }}>
         {children}
       </div>
     </div>

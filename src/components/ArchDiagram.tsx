@@ -17,6 +17,10 @@ const PAD = 14
 
 type Box = { x: number; y: number; w: number; h: number; node: DiagramNode; lane: number }
 
+/** Squeezes text that would overflow its box (a rough width estimate per character). */
+const fit = (text: string, perChar: number, room: number) =>
+  text.length * perChar > room ? { textLength: room, lengthAdjust: 'spacingAndGlyphs' as const } : {}
+
 export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; accent: string; label: string }) {
   const root = useRef<HTMLDivElement>(null)
   const { lanes, edges, band } = diagram
@@ -24,8 +28,9 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
   const nodeW = laneW - PAD * 2
   const maxNodes = Math.max(...lanes.map((l) => l.nodes.length))
   const bodyH = maxNodes * NODE_H + (maxNodes - 1) * GAP
-  const bandY = TOP + bodyH + 46
-  const H = band ? bandY + 70 : TOP + bodyH + 24
+  const channelY = TOP + bodyH + 22
+  const bandY = TOP + bodyH + 54
+  const H = band ? bandY + 70 : TOP + bodyH + 40
 
   const boxes = useMemo(() => {
     const map = new Map<string, Box>()
@@ -42,16 +47,34 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
   const paths = edges.map((e) => {
     const a = boxes.get(e.from)!
     const b = boxes.get(e.to)!
+    // Inside a lane: a straight drop, with room for a label beside it.
     if (a.lane === b.lane) {
       const x = a.x + a.w / 2
-      return { ...e, d: `M${x} ${a.y + a.h} L${x} ${b.y - 4}`, mid: { x, y: (a.y + a.h + b.y) / 2 } }
+      return { ...e, d: `M${x} ${a.y + a.h} L${x} ${b.y - 4}`, mid: { x, y: (a.y + a.h + b.y) / 2 }, labelAt: 'side' as const }
     }
     const x1 = a.x + a.w
     const y1 = a.y + a.h / 2
     const x2 = b.x - 4
     const y2 = b.y + b.h / 2
+    // Skipping a lane: run down the gap, along a channel under every node, and up into the target,
+    // so the line never crosses a box.
+    if (b.lane - a.lane >= 2) {
+      const r = 10
+      const xa = x1 + PAD
+      const xb = b.x - PAD
+      const d = [
+        `M${x1} ${y1}`,
+        `L${xa - r} ${y1} Q${xa} ${y1} ${xa} ${y1 + r}`,
+        `L${xa} ${channelY - r} Q${xa} ${channelY} ${xa + r} ${channelY}`,
+        `L${xb - r} ${channelY} Q${xb} ${channelY} ${xb} ${channelY - r}`,
+        `L${xb} ${y2 + r} Q${xb} ${y2} ${xb + r} ${y2}`,
+        `L${x2} ${y2}`,
+      ].join(' ')
+      return { ...e, d, mid: { x: (xa + xb) / 2, y: channelY }, labelAt: 'center' as const }
+    }
+    // Next lane over: a curve. The gap is too narrow for a label.
     const c = (x2 - x1) * 0.5
-    return { ...e, d: `M${x1} ${y1} C${x1 + c} ${y1} ${x2 - c} ${y2} ${x2} ${y2}`, mid: { x: (x1 + x2) / 2, y: (y1 + y2) / 2 } }
+    return { ...e, d: `M${x1} ${y1} C${x1 + c} ${y1} ${x2 - c} ${y2} ${x2} ${y2}`, mid: { x: (x1 + x2) / 2, y: (y1 + y2) / 2 }, labelAt: 'none' as const }
   })
 
   useLayoutEffect(() => {
@@ -103,10 +126,24 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
                 ? { strokeDasharray: '4 5', 'data-fade': true }
                 : { pathLength: 1, strokeDasharray: 1, strokeDashoffset: 0, 'data-edge': true })}
             />
-            {p.label && (
+            {p.label && p.labelAt !== 'none' && (
               <g data-fade>
-                <rect x={p.mid.x + 8} y={p.mid.y - 10} width={p.label.length * 6.4 + 14} height={20} rx={10} fill="#0b0b0f" stroke="rgb(237 237 237 / 0.15)" />
-                <text x={p.mid.x + 15} y={p.mid.y + 4} fill="#8e8e97" fontSize="11">
+                <rect
+                  x={p.labelAt === 'side' ? p.mid.x + 8 : p.mid.x - (p.label.length * 6.4 + 14) / 2}
+                  y={p.mid.y - 10}
+                  width={p.label.length * 6.4 + 14}
+                  height={20}
+                  rx={10}
+                  fill="#0b0b0f"
+                  stroke="rgb(237 237 237 / 0.15)"
+                />
+                <text
+                  x={p.labelAt === 'side' ? p.mid.x + 15 : p.mid.x}
+                  y={p.mid.y + 4}
+                  fill="#8e8e97"
+                  fontSize="11"
+                  textAnchor={p.labelAt === 'side' ? 'start' : 'middle'}
+                >
                   {p.label}
                 </text>
               </g>
@@ -127,11 +164,11 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
               stroke={node.accent ? accent : 'rgb(237 237 237 / 0.16)'}
               strokeOpacity={node.accent ? 0.75 : 1}
             />
-            <text x={x + 14} y={y + 28} fill="#ededed" fontSize="15" fontWeight="600">
+            <text x={x + 14} y={y + 28} fill="#ededed" fontSize="15" fontWeight="600" {...fit(node.label, 8.4, w - 28)}>
               {node.label}
             </text>
             {node.sub && (
-              <text x={x + 14} y={y + 48} fill="#8e8e97" fontSize="11.5">
+              <text x={x + 14} y={y + 48} fill="#8e8e97" fontSize="11.5" {...fit(node.sub, 6.1, w - 28)}>
                 {node.sub}
               </text>
             )}
