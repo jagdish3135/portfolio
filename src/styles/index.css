@@ -31,7 +31,17 @@
   --color-on-accent: #0b0b0f;
 }
 
+/* Yesteryear by Astigmatic (SIL Open Font License). Self-hosted, latin only. Used for the name in the nav. */
+@font-face {
+  font-family: "Yesteryear";
+  src: url("/fonts/yesteryear-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
+  --font-script: "Yesteryear", "Brush Script MT", cursive;
   --font-display: "Clash Display", "Inter Variable", system-ui, sans-serif;
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);

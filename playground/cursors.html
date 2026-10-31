@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cursor playground — Jagdish Patil</title>
+<!-- Dev-only page: try the five cursor options live. Not part of the site build. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Yesteryear&family=Kaushan+Script&family=Leckerli+One&family=Pacifico&family=Lobster&display=swap" rel="stylesheet" />
+<style>
+@font-face { font-family: Clash; src: url(/fonts/clash-display-500.woff2); font-weight: 500 }
+@font-face { font-family: Clash; src: url(/fonts/clash-display-600.woff2); font-weight: 600 }
+:root {
+  --bg: #0b0b0f; --surface: #131318; --ink: #ededed; --mute: #8e8e97; --line: rgb(237 237 237 / .1);
+  --accent: #c6ff3d; --accent-text: #c6ff3d; --on-accent: #0b0b0f; --shadow: rgb(0 0 0 / .9);
+  --logo-font: Yesteryear;
+}
+html[data-theme=light] {
+  --bg: #f3f2ee; --surface: #ffffff; --ink: #111115; --mute: #5c5c65; --line: rgb(17 17 21 / .12);
+  --accent-text: #4b6a00; --shadow: rgb(40 40 60 / .22);
+}
+* { box-sizing: border-box; margin: 0 }
+html, body { background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased }
+body.custom, body.custom * { cursor: none !important }
+body.custom input { cursor: text !important }
+a { color: inherit; text-decoration: none }
+
+/* ---------- page mock ---------- */
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 40px }
+header { position: sticky; top: 0; z-index: 10; padding-top: 18px }
+nav { display: flex; justify-content: space-between; gap: 12px }
+.pill { display: flex; align-items: center; height: 56px; gap: 4px; padding: 0 10px 0 20px; border-radius: 18px; border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 78%, transparent); backdrop-filter: blur(14px); box-shadow: 0 10px 30px -18px var(--shadow) }
+.logo { font-family: var(--logo-font); font-size: 27px; line-height: 1; margin-right: 18px; white-space: nowrap; transform: translateY(1px) }
+.pill a.l { height: 40px; display: grid; place-items: center; padding: 0 14px; border-radius: 12px; font-size: 15px; opacity: .85 }
+.pill a.l:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); opacity: 1 }
+.cta { height: 40px; display: grid; place-items: center; padding: 0 16px; border-radius: 12px; background: var(--ink); color: var(--bg); font-weight: 500; font-size: 15px }
+.avail { display: flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 14px; opacity: .85 }
+.avail i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent) }
+
+.label { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); font-weight: 500 }
+section.hero { padding: 90px 0 50px }
+h1 { font-family: Clash; font-weight: 500; font-size: clamp(48px, 7.4vw, 118px); letter-spacing: -.03em; line-height: .92; margin-top: 18px }
+h1 em { font-style: normal; color: var(--accent-text) }
+.btns { display: flex; gap: 12px; margin-top: 34px }
+.btn { height: 50px; padding: 0 24px; border-radius: 999px; display: grid; place-items: center; font-weight: 600; font-size: 15px }
+.btn.primary { background: var(--accent); color: var(--on-accent) }
+.btn.ghost { border: 1px solid var(--line) }
+.grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; padding: 40px 0 160px }
+.card { display: block; border-radius: 22px; padding: 10px; border: 1px solid var(--line); background: var(--surface); transition: border-color .4s }
+.card:hover { border-color: #ff5a1e }
+.card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; object-position: top; border-radius: 14px; display: block }
+.card h3 { font-family: Clash; font-weight: 500; font-size: 32px; margin: 16px 8px 4px }
+.card p { color: var(--mute); margin: 0 8px 8px; font-size: 15px }
+.side p.body { font-size: 18px; line-height: 1.6; color: var(--mute); margin-top: 14px }
+.side input { margin-top: 26px; width: 100%; height: 50px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); padding: 0 20px; font: inherit }
+.side .row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap }
+
+/* ---------- control panel ---------- */
+.panel { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: 6px; padding: 8px; border-radius: 20px;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: blur(14px); box-shadow: 0 20px 50px -20px var(--shadow) }
+.panel .group { display: flex; align-items: center; gap: 4px; padding: 0 6px }
+.panel .group + .group { border-left: 1px solid var(--line) }
+.panel span.k { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-right: 4px }
+.panel button, .panel select { white-space: nowrap; height: 38px; border: 0; border-radius: 12px; padding: 0 12px; background: transparent; color: var(--ink); font: 500 14px Inter, sans-serif }
+.panel button:hover { background: color-mix(in srgb, var(--ink) 7%, transparent) }
+.panel button.on { background: var(--accent); color: var(--on-accent) }
+.panel select { border: 1px solid var(--line); background: var(--bg) }
+.hint { position: fixed; left: 50%; bottom: 82px; transform: translateX(-50%); font-size: 13px; color: var(--mute); z-index: 20; white-space: nowrap }
+
+/* ---------- cursors (shared) ---------- */
+.cur { position: fixed; inset: 0; pointer-events: none; z-index: 1000; display: none }
+.cur.active { display: block }
+.cur [data-p] { position: fixed; left: 0; top: 0; will-change: transform }
+.ease { transition: width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1), opacity .25s, border-radius .35s, background-color .3s, transform .2s }
+
+/* A · Multiplayer */
+#A .arrow { width: 22px; height: 26px; transition: opacity .2s }
+#A .arrow path { fill: var(--accent); stroke: #0b0b0f }
+html[data-theme=light] #A .arrow path { fill: #111115; stroke: #fff }
+#A .tag { position: fixed; left: 0; top: 0; background: var(--accent); color: #0b0b0f; font: 600 13px Inter, sans-serif; padding: 4px 9px; border-radius: 7px 7px 7px 2px; white-space: nowrap }
+#A .caret { position: absolute; left: 0; top: 0; width: 2px; height: var(--caret, 28px); background: var(--accent-text); transform: translate(-1px, -50%); opacity: 0 }
+#A[data-mode=text] .arrow { opacity: 0 } #A[data-mode=text] .caret { opacity: 1 }
+#A[data-mode=native] { opacity: 0 }
+
+/* B · Selection */
+#B .cross { width: 21px; height: 21px; margin: -10px 0 0 -10px }
+#B .cross:before, #B .cross:after { content: ''; position: absolute; background: var(--ink) }
+#B .cross:before { left: 10px; top: 0; width: 1.5px; height: 21px } #B .cross:after { top: 10px; left: 0; height: 1.5px; width: 21px }
+#B .box { position: fixed; left: 0; top: 0; border: 1.5px solid var(--accent-text); opacity: 0; transition: opacity .2s }
+#B .box i { position: absolute; width: 8px; height: 8px; background: var(--bg); border: 1.5px solid var(--accent-text) }
+#B .box i:nth-child(1) { left: -5px; top: -5px } #B .box i:nth-child(2) { right: -5px; top: -5px }
+#B .box i:nth-child(3) { left: -5px; bottom: -5px } #B .box i:nth-child(4) { right: -5px; bottom: -5px }
+#B .badge { position: absolute; left: 50%; top: 100%; margin-top: 8px; transform: translateX(-50%); background: var(--accent); color: #0b0b0f; font: 600 12px Inter, sans-serif; padding: 3px 8px; border-radius: 4px; white-space: nowrap }
+#B[data-on] .box { opacity: 1 } #B[data-on] .cross { opacity: .35 }
+#B[data-mode=native] { opacity: 0 }
+
+/* C · Glass chip */
+#C .chip { width: var(--w, 26px); height: var(--h, 26px); border-radius: var(--r, 9px); display: grid; place-items: center; color: var(--ink);
+  border: 1px solid rgb(255 255 255 / .45); background: linear-gradient(140deg, rgb(255 255 255 / .3), rgb(255 255 255 / .06));
+  backdrop-filter: blur(6px); box-shadow: inset 0 1px 0 rgb(255 255 255 / .5), 0 10px 24px -10px #000; font: 600 13px Inter, sans-serif; white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) }
+html[data-theme=light] #C .chip { border-color: rgb(17 17 21 / .22); background: linear-gradient(140deg, rgb(255 255 255 / .92), rgb(255 255 255 / .55)) }
+#C[data-mode=link] .chip { --w: 54px; --h: 54px; --r: 16px }
+#C[data-mode=view] .chip { --w: 104px; --h: 42px; --r: 14px; --rot: 0deg !important }
+#C[data-mode=text] .chip { --w: 5px; --h: var(--caret, 30px); --r: 3px }
+#C[data-mode=native] .chip { opacity: 0 }
+#C .chip b { opacity: 0; transition: opacity .2s } #C[data-mode=view] .chip b { opacity: 1 }
+
+/* D · Lime dot */
+#D .dot { width: var(--w, 12px); height: var(--h, 12px); border-radius: 999px; background: var(--accent); color: #0b0b0f; display: grid; place-items: center;
+  font: 600 13px Inter, sans-serif; white-space: nowrap; transform: translate(-50%, -50%) }
+html[data-theme=light] #D .dot { background: #8fc31c }
+#D[data-mode=link] .dot { --w: 46px; --h: 46px; background: transparent; border: 2px solid var(--ink) }
+#D[data-mode=view] .dot { --w: 96px; --h: 40px }
+#D[data-mode=text] .dot { --w: 3px; --h: var(--caret, 30px); border-radius: 2px }
+#D[data-mode=native] .dot { opacity: 0 }
+#D .dot b { opacity: 0; transition: opacity .2s } #D[data-mode=view] .dot b { opacity: 1 }
+
+/* E · Studio HUD */
+#E .hl { position: fixed; left: 0; right: 0; height: 1px; background: var(--ink); opacity: .16 }
+#E .vl { position: fixed; top: 0; bottom: 0; width: 1px; background: var(--ink); opacity: .16 }
+#E .ring { width: var(--s, 14px); height: var(--s, 14px); border: 1.5px solid var(--ink); border-radius: 50%; transform: translate(-50%, -50%) }
+#E[data-mode=link] .ring { --s: 34px; border-color: var(--ink); border-width: 2px }
+#E[data-mode=text] .ring { --s: 2px; border-radius: 1px; height: var(--caret, 30px); background: var(--ink) }
+#E .read { position: fixed; left: 0; top: 0; font: 500 11px ui-monospace, Consolas, monospace; color: var(--accent-text); white-space: nowrap; background: color-mix(in srgb, var(--bg) 85%, transparent); padding: 2px 6px; border-radius: 4px }
+#E[data-mode=view] .read { background: var(--accent); color: #0b0b0f; padding: 3px 7px; border-radius: 4px; font-weight: 700 }
+#E[data-mode=native] { opacity: 0 }
+</style>
+</head>
+<body class="custom">
+<header class="wrap">
+  <nav>
+    <div class="pill"><a class="logo" href="#">Jagdish Patil</a><a class="l" href="#">Work</a><a class="l" href="#">About</a><a class="l" href="#">Toolkit</a><a class="l" href="#">Contact</a></div>
+    <div class="pill" style="padding:0 8px"><span class="avail"><i></i>Available for work</span><a class="cta" href="#">Let’s talk</a></div>
+  </nav>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <p class="label">Cursor playground · move around, hover things</p>
+    <h1>Building <em>AI</em> solutions.<br />Custom setups, shipped live.</h1>
+    <div class="btns"><a class="btn primary" href="#">View Work ↓</a><a class="btn ghost" href="#">Let’s Talk</a></div>
+  </section>
+  <div class="grid">
+    <a class="card" href="#" data-cursor="view"><img src="/work/glassboxapk/desktop-800.webp" alt="" /><h3>GlassBoxAPK</h3><p>Hover the card: the cursor shows “View →”.</p></a>
+    <div class="side">
+      <p class="label">Text, links and inputs</p>
+      <p class="body">This paragraph is text, so each cursor turns into a caret here. The input below keeps the normal I-beam, as on the real site.</p>
+      <input placeholder="Type here: native cursor" />
+      <div class="row"><a class="btn ghost" href="#">GitHub ↗</a><a class="btn ghost" href="#">LinkedIn ↗</a></div>
+    </div>
+  </div>
+</main>
+
+<p class="hint">Keys 1–5 switch cursor · T switches theme</p>
+<div class="panel">
+  <div class="group"><span class="k">Cursor</span>
+    <button data-c="A">A · Multiplayer</button><button data-c="B">B · Selection</button><button data-c="C">C · Glass</button><button data-c="D">D · Dot</button><button data-c="E">E · HUD</button>
+  </div>
+  <div class="group"><span class="k">Logo font</span>
+    <select id="font"><option>Yesteryear</option><option>Kaushan Script</option><option>Leckerli One</option><option>Pacifico</option><option>Lobster</option></select>
+  </div>
+  <div class="group"><button id="theme">Light</button></div>
+</div>
+
+<!-- cursor layers -->
+<div class="cur" id="A"><svg data-p="arrow" class="arrow" viewBox="0 0 22 26"><path d="M1 1v21l6-6 4 9 4-2-4-9h9z" stroke-width="1.5" stroke-linejoin="round" /></svg><div data-p="caretpos"><div class="caret ease"></div></div><span class="tag" data-p="tag">Jagdish</span></div>
+<div class="cur" id="B"><div data-p="cross" class="cross"></div><div class="box"><i></i><i></i><i></i><i></i><span class="badge"></span></div></div>
+<div class="cur" id="C"><div data-p="chip"><div class="chip ease"><b>View →</b></div></div></div>
+<div class="cur" id="D"><div data-p="dot"><div class="dot ease"><b>View →</b></div></div></div>
+<div class="cur" id="E"><div class="hl"></div><div class="vl"></div><div data-p="ring"><div class="ring ease"></div></div><span class="read" data-p="read"></span></div>
+
+<script>
+const LABEL = { view: 'View →' }
+const INTERACTIVE = 'a, button, select, [role=button]'
+const TEXT = 'p, h1, h2, h3, li'
+let cursor = 'A'
+const mouse = { x: innerWidth / 2, y: innerHeight / 2 }
+const lag = { ...mouse }
+let vx = 0
+let hover = { mode: 'default', el: null }
+
+function resolve(t) {
+  if (!t || !t.closest) return { mode: 'default', el: null }
+  if (t.closest('input, textarea')) return { mode: 'native', el: null }
+  const view = t.closest('[data-cursor=view]')
+  if (view) return { mode: 'view', el: view }
+  const link = t.closest(INTERACTIVE)
+  if (link) return { mode: 'link', el: link }
+  const text = t.closest(TEXT)
+  if (text) return { mode: 'text', el: text }
+  return { mode: 'default', el: null }
+}
+
+function setCursor(c) {
+  cursor = c
+  document.querySelectorAll('.cur').forEach((el) => el.classList.toggle('active', el.id === c))
+  document.querySelectorAll('[data-c]').forEach((b) => b.classList.toggle('on', b.dataset.c === c))
+  apply()
+}
+
+function apply() {
+  const root = document.getElementById(cursor)
+  root.dataset.mode = hover.mode
+  if (hover.mode === 'text' && hover.el) {
+    const size = parseFloat(getComputedStyle(hover.el).fontSize)
+    root.style.setProperty('--caret', Math.min(Math.max(size * 1.05, 16), 130) + 'px')
+  }
+  if (cursor === 'A') root.querySelector('.tag').textContent = { link: 'Click', view: 'View →', text: 'Jagdish', native: '' }[hover.mode] ?? 'Jagdish'
+}
+
+addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY })
+document.addEventListener('pointerover', (e) => { hover = resolve(e.target); apply() })
+addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return
+  if ('12345'.includes(e.key)) setCursor('ABCDE'['12345'.indexOf(e.key)])
+  if (e.key === 't' || e.key === 'T') toggleTheme()
+})
+document.querySelectorAll('[data-c]').forEach((b) => b.addEventListener('click', () => setCursor(b.dataset.c)))
+function toggleTheme() {
+  const light = document.documentElement.dataset.theme !== 'light'
+  document.documentElement.dataset.theme = light ? 'light' : 'dark'
+  document.getElementById('theme').textContent = light ? 'Dark' : 'Light'
+}
+document.getElementById('theme').addEventListener('click', toggleTheme)
+document.getElementById('font').addEventListener('change', (e) => document.documentElement.style.setProperty('--logo-font', `"${e.target.value}"`))
+
+const pos = (el, x, y) => (el.style.transform = `translate3d(${x}px, ${y}px, 0)`)
+const B = { x: 0, y: 0, w: 0, h: 0 }
+
+let last = performance.now()
+function tick(now) {
+  const dt = Math.min((now - last) / 1000, 0.1)
+  last = now
+  const k = 1 - Math.pow(1 - 0.18, dt * 60)
+  const px = lag.x
+  lag.x += (mouse.x - lag.x) * k
+  lag.y += (mouse.y - lag.y) * k
+  vx += ((lag.x - px) - vx) * 0.2
+
+  const root = document.getElementById(cursor)
+  const p = (n) => root.querySelector(`[data-p=${n}]`)
+  if (cursor === 'A') {
+    pos(p('arrow'), mouse.x, mouse.y)
+    pos(p('caretpos'), mouse.x, mouse.y)
+    pos(p('tag'), lag.x + 14, lag.y + 20)
+  } else if (cursor === 'B') {
+    pos(p('cross'), mouse.x, mouse.y)
+    const box = root.querySelector('.box')
+    const on = hover.el && hover.mode !== 'native'
+    root.toggleAttribute('data-on', !!on)
+    const r = on ? hover.el.getBoundingClientRect() : { left: mouse.x, top: mouse.y, width: 0, height: 0 }
+    const pad = on ? 6 : 0
+    const kb = 1 - Math.pow(1 - 0.25, dt * 60)
+    B.x += (r.left - pad - B.x) * kb; B.y += (r.top - pad - B.y) * kb
+    B.w += (r.width + pad * 2 - B.w) * kb; B.h += (r.height + pad * 2 - B.h) * kb
+    box.style.transform = `translate3d(${B.x}px, ${B.y}px, 0)`
+    box.style.width = B.w + 'px'; box.style.height = B.h + 'px'
+    if (on) root.querySelector('.badge').textContent =
+      hover.mode === 'view' ? 'View →' : hover.mode === 'text' ? `Text · ${Math.round(parseFloat(getComputedStyle(hover.el).fontSize))}px` : `${Math.round(r.width)} × ${Math.round(r.height)}`
+  } else if (cursor === 'C') {
+    pos(p('chip'), lag.x, lag.y)
+    root.querySelector('.chip').style.setProperty('--rot', Math.max(-25, Math.min(25, vx * 2.2)) + 'deg')
+  } else if (cursor === 'D') {
+    const kd = 1 - Math.pow(1 - 0.35, dt * 60)
+    D.x += (mouse.x - D.x) * kd; D.y += (mouse.y - D.y) * kd
+    pos(p('dot'), D.x, D.y)
+  } else if (cursor === 'E') {
+    root.querySelector('.hl').style.transform = `translateY(${mouse.y}px)`
+    root.querySelector('.vl').style.transform = `translateX(${mouse.x}px)`
+    pos(p('ring'), mouse.x, mouse.y)
+    pos(p('read'), mouse.x + 16, mouse.y + 14)
+    p('read').textContent = { link: '→ open', view: 'VIEW →', text: 'text', native: '' }[hover.mode] ?? `x ${Math.round(mouse.x)} · y ${Math.round(mouse.y)}`
+  }
+  requestAnimationFrame(tick)
+}
+const D = { ...mouse }
+setCursor('A')
+requestAnimationFrame(tick)
+</script>
+</body>
+</html>

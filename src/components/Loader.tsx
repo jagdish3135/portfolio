@@ -87,6 +87,8 @@ export function Loader({ onReveal, onDone }: Props) {
         'counted',
       )
       tl.to(curtainRef.current, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.8, ease: 'expo.inOut' }, 'counted+=0.08')
+      // The initials hand over to the script name in the nav: they fade as it fades in.
+      tl.to(jp, { opacity: 0, duration: 0.35, ease: 'power1.out' }, 'counted+=0.5')
       tl.add(onReveal, 'counted+=0.4')
     }, rootRef)
 

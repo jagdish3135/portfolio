@@ -65,12 +65,12 @@ export function Nav() {
             <a
               href="/"
               data-logo
-              className="mr-1 font-display text-[22px] font-semibold leading-none tracking-tight md:mr-5"
-              style={{ opacity: done ? 1 : 0 }}
+              className="mr-1 translate-y-[1px] whitespace-nowrap font-script text-[25px] leading-none transition-opacity duration-700 md:mr-4 md:text-[27px]"
+              style={{ opacity: ready || done ? 1 : 0 }}
               aria-label="Jagdish Patil, home"
               onClick={goTo('#top')}
             >
-              JP
+              Jagdish Patil
             </a>
             <m.ul
               className="hidden items-center md:flex"
