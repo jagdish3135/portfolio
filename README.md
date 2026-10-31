@@ -171,6 +171,8 @@ e2e/            Playwright tests
 
 ## 🌐 Deploy
 
+This repo is connected to Vercel: every push to `main` deploys to [jagdishpatil.vercel.app](https://jagdishpatil.vercel.app), and pull requests get preview links.
+
 It's a static site. On Vercel, import the repo with the default Vite settings; [`vercel.json`](vercel.json) serves each case study's own HTML and sends other routes to the app. If the address isn't `jagdishpatil.vercel.app`, change `url` in [`src/data/site.ts`](src/data/site.ts) (or set `SITE_URL` in the build environment) so canonical links, share images and the sitemap point to the right place.
 
 ---
