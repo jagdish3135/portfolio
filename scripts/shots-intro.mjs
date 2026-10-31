@@ -1,4 +1,4 @@
-// Intro checkpoint: the particle name assembled, mid-split and fully open, in both themes and sizes.
+// Intro checkpoint: the particle name assembled, mid-split and dissolved, in both themes and sizes.
 import { chromium } from 'playwright'
 import sharp from 'sharp'
 const BASE = process.env.URL ?? 'http://localhost:5220'
@@ -19,8 +19,8 @@ for (const theme of ['dark', 'light']) {
     await page.waitForTimeout(2600)
     const vh = opts.viewport.height
     for (const p of [0, 0.45, 1]) {
-      // The pin runs for 130% of the viewport height; the cut finishes at 80% of it.
-      await page.evaluate((y) => scrollTo(0, y), Math.round(vh * 1.3 * (0.08 + p * 0.72)))
+      // The pin runs for 90% of the viewport height; the cut starts at 10% of it.
+      await page.evaluate((y) => scrollTo(0, y), Math.round(vh * 0.9 * (0.1 + p * 0.85)))
       await page.waitForTimeout(1300)
       const file = `.shots/intro-${theme}-${name}-${p}.png`
       await page.screenshot({ path: file })

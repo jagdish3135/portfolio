@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/React_Three_Fiber-000000?style=flat-square&logo=threedotjs&logoColor=white" alt="React Three Fiber">
   <img src="https://img.shields.io/badge/GSAP-0ae448?style=flat-square&logo=greensock&logoColor=white" alt="GSAP">
   <img src="https://img.shields.io/badge/Tailwind_4-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
-  <img src="https://img.shields.io/badge/Playwright_tests-29_passing-2ead33?style=flat-square" alt="29 Playwright tests passing">
+  <img src="https://img.shields.io/badge/Playwright_tests-33_passing-2ead33?style=flat-square" alt="33 Playwright tests passing">
 </p>
 
 <p align="center">
@@ -56,6 +56,8 @@
 | | |
 |---|---|
 | ⏱️ **Loader** | Counts 000 → 100 next to a large “JP”, then flies the initials into the nav logo as the curtain lifts. About 1.8 s. |
+| ✨ **Particle intro** | Right after the loader, “JAGDISH PATIL” assembles out of a few thousand dots on a 2D canvas (the cursor pushes them aside). Scrolling cuts the name at the gap between the words; the halves part, scatter and fade into the hero. |
+| 🌗 **Dark and light** | Dark by default, with a sun/moon toggle in the nav that is remembered. The new theme grows out of the button in a circle. The 3D scene, diagrams and brand colours all follow the theme. |
 | 🧊 **3D hero** | An interface pulled apart into its design layers (grid, wireframe, type, components, a selected lime button), as glass panes in React Three Fiber. It tilts with the mouse and turns when you drag it. |
 | 🖱️ **Custom cursor** | A dot and a lagging ring with five states: links, “View →” on cards, “Drag” on the scene, a text caret sized to the text, and the native I-beam in inputs. Uses `mix-blend-mode: difference`. Off on touch screens; no lag with reduced motion. |
 | 🃏 **Selected work** | On desktop, a pinned 3D stack: scrolling brings the panels forward one at a time. Hover tilts the panel and plays a short preview. A click flies the cover into the case study (a GSAP Flip-style shared-element transition). Phones get a plain list. |
@@ -127,7 +129,7 @@ Needs Node 20+.
 npm install
 npm run dev          # http://localhost:5220
 npm run build        # type check, build, then per-page HTML, sitemap and robots.txt
-npm run test:e2e     # Playwright on the production build, desktop and phone
+npm run test:e2e     # Playwright on the production build, desktop and phone (33 checks)
 ```
 
 <details>
@@ -138,7 +140,7 @@ npm run test:e2e     # Playwright on the production build, desktop and phone
 |---|---|
 | `npm run dev` | Dev server on port 5220 |
 | `npm run build` | `tsc`, `vite build`, then [`scripts/prerender.mjs`](scripts/prerender.mjs): a head (title, description, canonical, Open Graph, JSON-LD) for every page, plus `sitemap.xml` and `robots.txt` |
-| `npm run test:e2e` | 29 Playwright checks: the loader hands over, every card opens its case study (click on phones, keyboard on desktop), outside links are valid and respond, reduced motion gets the poster, copying the email works |
+| `npm run test:e2e` | 33 Playwright checks: the loader hands over, the particle intro draws and dissolves, the theme toggle is remembered, every card opens its case study (click on phones, keyboard on desktop), outside links are valid and respond, reduced motion gets the poster, copying the email works |
 | `npm run lighthouse` | Lighthouse scores for the build served on port 4173 (`npx vite preview --port 4173`) |
 | `npm run og` | Share images (1200×630) for every page into `public/og/` |
 | `node scripts/check-pages.mjs` | Opens every case study at desktop and phone size; reports console errors, broken images and sideways scroll |

@@ -110,23 +110,22 @@ test('theme toggle switches to light and is remembered', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Switch to dark theme' })).toBeVisible()
 })
 
-test('the particle intro draws the name and opens on scroll', async ({ page }) => {
+test('the particle intro draws the name and dissolves it on scroll', async ({ page }) => {
   await openHome(page)
   const canvas = page.locator('#top canvas')
   await expect(canvas).toBeVisible()
   await page.waitForTimeout(2500)
-  // Some pixels are drawn (the name has assembled).
-  const drawn = await canvas.evaluate((c: HTMLCanvasElement) => {
-    const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data
-    let n = 0
-    for (let i = 3; i < d.length; i += 4 * 97) if (d[i] > 0) n++
-    return n
-  })
-  expect(drawn).toBeGreaterThan(50)
-  // Scrolling through the pin opens the photo frame.
+  const inked = () =>
+    canvas.evaluate((c: HTMLCanvasElement) => {
+      const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data
+      let n = 0
+      for (let i = 3; i < d.length; i += 4 * 97) if (d[i] > 0) n++
+      return n
+    })
+  // The name has assembled…
+  expect(await inked()).toBeGreaterThan(50)
+  // …and by the end of the pin it has parted and faded away.
   const vh = page.viewportSize()!.height
-  await page.evaluate((y) => scrollTo(0, y), Math.round(vh * 1.3 * 0.85))
-  await expect
-    .poll(async () => page.locator('[data-portrait-frame]').evaluate((el) => getComputedStyle(el).clipPath))
-    .toMatch(/inset\(0(px|%)? 0(px|%)?|inset\(0px\)|inset\(0%/)
+  await page.evaluate((y) => scrollTo(0, y), Math.round(vh * 0.89))
+  await expect.poll(inked, { timeout: 5000 }).toBeLessThan(5)
 })

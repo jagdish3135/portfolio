@@ -3,9 +3,9 @@
  *
  * - Before `assemble()`, the dots drift scattered across the stage.
  * - `assemble()` springs them into the letters, in a left-to-right sweep.
- * - `setSplit(q)` (0–1, from scroll) cuts the name at the gap between the two words: the halves move
- *   apart and shrink a little toward their inner edge, so they end up flanking the photo
- *   (side by side on wide screens, above and below on narrow ones).
+ * - `setSplit(q)` (0–1, from scroll) cuts the name at the gap between the two words: the halves part
+ *   (sideways on wide screens, up and down on narrow ones), scatter a little and fade out,
+ *   handing over to the hero below.
  * - The pointer pushes dots away; they spring back.
  *
  * Plain canvas, no WebGL: cheap enough for phones, and it works without a GPU.
@@ -27,15 +27,6 @@ type Dot = {
   seed: number
 }
 
-export type ParticleOptions = {
-  /**
-   * Where the photo sits on the stage: its centre and half its width (or half its height on
-   * narrow screens) plus a margin. The split halves end just outside it.
-   */
-  photo: (w: number, h: number, vertical: boolean) => { cx: number; cy: number; half: number }
-  /** Called every frame with the smoothed, eased split progress (0–1), to move the photo in sync. */
-  onFrame?: (split: number) => void
-}
 
 const SPRING = 0.075
 const DAMPING = 0.8
@@ -50,7 +41,7 @@ export class ParticleName {
   private dpr = 1
   private vertical = false
   private split = { x: 0, y: 0 } // the cut, in CSS pixels
-  private photo = { cx: 0, cy: 0, half: 0 }
+  private alpha = 1
   private colours: string[] = []
   private assembledAt = -1
   private q = 0 // smoothed split progress
@@ -60,10 +51,7 @@ export class ParticleName {
   private running = false
   private start = performance.now()
 
-  constructor(
-    canvas: HTMLCanvasElement,
-    private opts: ParticleOptions,
-  ) {
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     this.ctx = canvas.getContext('2d')!
   }
@@ -148,7 +136,6 @@ export class ParticleName {
     }
     // Draw by colour, so the canvas changes fill style only three times a frame.
     this.dots = dots.sort((a, b) => a.colour - b.colour)
-    this.photo = this.opts.photo(this.w, this.h, this.vertical)
   }
 
   assemble() {
@@ -198,8 +185,9 @@ export class ParticleName {
     this.q += (this.target - this.q) * k
     const q = this.q
     const ease = q < 0.5 ? 2 * q * q : 1 - (-2 * q + 2) ** 2 / 2
-    this.opts.onFrame?.(ease)
-    const shrink = 1 - ease * (this.vertical ? 0.18 : 0.38)
+    // The name fades out over the second half of the cut.
+    this.alpha = 1 - Math.min(Math.max((ease - 0.55) / 0.45, 0), 1)
+    const spread = ease * ease * 160
     const t = (now - this.start) / 1000
     const since = this.assembledAt < 0 ? -1 : (now - this.assembledAt) / 1000
     const { x: px, y: py } = this.pointer
@@ -213,14 +201,13 @@ export class ParticleName {
         tx = d.sx + Math.sin(t * 0.4 + d.seed) * 14
         ty = d.sy + Math.cos(t * 0.35 + d.seed) * 14
       } else if (this.vertical) {
-        // Halves move up and down from the cut, shrinking toward it.
-        const anchor = this.split.y + (this.photo.cy + d.side * this.photo.half - this.split.y) * ease
-        tx = this.w / 2 + (d.hx - this.w / 2) * shrink
-        ty = anchor + (d.hy - this.split.y) * shrink
+        // Halves part up and down from the cut, then scatter.
+        tx = d.hx + Math.cos(d.seed) * spread * 0.6
+        ty = d.hy + d.side * ease * this.h * 0.42 + Math.sin(d.seed) * spread
       } else {
-        const anchor = this.split.x + (this.photo.cx + d.side * this.photo.half - this.split.x) * ease
-        tx = anchor + (d.hx - this.split.x) * shrink
-        ty = this.split.y + (d.hy - this.split.y) * shrink
+        // Halves part sideways from the cut, then scatter.
+        tx = d.hx + d.side * ease * this.w * 0.5 + Math.cos(d.seed) * spread
+        ty = d.hy + Math.sin(d.seed) * spread * 0.8
       }
       // A slow shimmer, so the name feels alive.
       tx += Math.sin(t * 1.3 + d.seed) * 0.6
@@ -251,6 +238,8 @@ export class ParticleName {
     const { ctx, dpr } = this
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     ctx.clearRect(0, 0, this.w, this.h)
+    if (this.alpha <= 0.01) return
+    ctx.globalAlpha = this.alpha
     let current = -1
     for (const d of this.dots) {
       if (d.colour !== current) {
