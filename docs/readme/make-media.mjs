@@ -16,7 +16,7 @@ const BASE = process.env.URL ?? 'http://localhost:4173'
 const steps = process.argv.slice(2)
 const run = (s) => !steps.length || steps.includes(s)
 const GPU = ['--enable-gpu', '--ignore-gpu-blocklist', '--use-angle=d3d11']
-const HIDE = '.grain,.skip-link,.cursor-pos{display:none!important}'
+const HIDE = '.grain,.skip-link,.hud{display:none!important}'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 const ff = (...args) => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...args], { stdio: 'inherit' })
 mkdirSync(raw, { recursive: true })

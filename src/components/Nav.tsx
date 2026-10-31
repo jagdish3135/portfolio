@@ -4,6 +4,7 @@ import { usePageTransition } from '../lib/transition'
 import { m, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from './MagneticButton'
 import { ThemeToggle } from './ThemeToggle'
+import { Logo } from './Logo'
 import { useIntro } from '../lib/intro'
 import { scrollTo } from '../lib/smooth'
 import { DUR, EASE_BEZIER } from '../lib/motion'
@@ -65,12 +66,12 @@ export function Nav() {
             <a
               href="/"
               data-logo
-              className="mr-1 translate-y-[1px] whitespace-nowrap font-script text-[25px] leading-none transition-opacity duration-700 md:mr-4 md:text-[27px]"
+              className="mr-2 block text-ink transition-opacity duration-700 md:mr-5"
               style={{ opacity: ready || done ? 1 : 0 }}
               aria-label="Jagdish Patil, home"
               onClick={goTo('#top')}
             >
-              Jagdish Patil
+              <Logo className="h-[22px] w-auto md:h-[25px]" />
             </a>
             <m.ul
               className="hidden items-center md:flex"

@@ -19,7 +19,7 @@ async function shot(width, height, file, opts = {}) {
     const fs = await import('node:fs')
     fs.writeFileSync(file, Buffer.from(data.split(',')[1], 'base64'))
   } else {
-    await page.addStyleTag({ content: '.grain,.cursor-pos{display:none!important}' })
+    await page.addStyleTag({ content: '.grain,.hud{display:none!important}' })
     await page.screenshot({ path: file })
   }
   await page.close()

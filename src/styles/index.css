@@ -31,17 +31,7 @@
   --color-on-accent: #0b0b0f;
 }
 
-/* Yesteryear by Astigmatic (SIL Open Font License). Self-hosted, latin only. Used for the name in the nav. */
-@font-face {
-  font-family: "Yesteryear";
-  src: url("/fonts/yesteryear-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
-  --font-script: "Yesteryear", "Brush Script MT", cursive;
   --font-display: "Clash Display", "Inter Variable", system-ui, sans-serif;
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -248,123 +238,115 @@ html.is-loading {
   cursor: text !important;
 }
 
-.cursor-pos {
+/* Studio HUD cursor: crosshair lines meeting at the pointer, a small ring and a live x · y readout. */
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.hud[data-hidden="true"],
+.hud[data-mode="native"] {
+  opacity: 0;
+}
+.hud-h,
+.hud-v {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10000;
-  pointer-events: none;
+  background: var(--ink);
+  opacity: 0.14;
   will-change: transform;
-  mix-blend-mode: difference;
-  transition: opacity 0.3s;
 }
-.cursor-pos[data-hidden="true"] {
-  opacity: 0;
+.hud-h {
+  width: 100vw;
+  height: 1px;
 }
-
-.cursor-dot {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform 0.3s var(--ease-expo), opacity 0.2s;
+.hud-v {
+  width: 1px;
+  height: 100vh;
 }
-.cursor-pos[data-mode="link"] .cursor-dot,
-.cursor-pos[data-mode="view"] .cursor-dot,
-.cursor-pos[data-mode="drag"] .cursor-dot,
-.cursor-pos[data-mode="text"] .cursor-dot,
-.cursor-pos[data-mode="native"] .cursor-dot {
-  transform: scale(0);
-  opacity: 0;
+/* Over a card or the 3D scene the lines pick up the accent. */
+.hud[data-mode="view"] .hud-h,
+.hud[data-mode="view"] .hud-v,
+.hud[data-mode="drag"] .hud-h,
+.hud[data-mode="drag"] .hud-v {
+  background: var(--accent-text);
+  opacity: 0.35;
 }
-
-.cursor-ring {
+.hud-pos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+.hud-ring {
   position: absolute;
   left: 0;
   top: 0;
-  width: var(--w, 36px);
-  height: var(--h, 36px);
-  display: grid;
-  place-items: center;
-  border: 1px solid rgb(255 255 255 / 0.85);
-  border-radius: 999px;
-  transform: translate(-50%, -50%) scale(var(--s, 1));
+  width: var(--s, 14px);
+  height: var(--s, 14px);
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(var(--p, 1));
   transition:
-    width 0.45s var(--ease-expo),
-    height 0.45s var(--ease-expo),
-    border-radius 0.45s var(--ease-expo),
-    background-color 0.3s,
+    width 0.35s var(--ease-expo),
+    height 0.35s var(--ease-expo),
+    border-radius 0.35s var(--ease-expo),
     border-color 0.3s,
-    transform 0.25s var(--ease-expo),
-    opacity 0.25s;
+    background-color 0.3s,
+    transform 0.2s var(--ease-expo);
 }
-.cursor-label {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  color: #fff;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.25s, transform 0.35s var(--ease-expo);
+.hud[data-mode="link"] .hud-ring {
+  --s: 36px;
+  border-width: 2px;
+  /* Two-tone edge (ink inside, page colour outside) so it shows on lime, ink or plain buttons. */
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1.5px var(--bg), inset 0 0 0 1px var(--bg);
 }
-
-/* over links and buttons: the ring grows */
-.cursor-pos[data-mode="link"] .cursor-ring {
-  --w: 60px;
-  --h: 60px;
-  background: rgb(255 255 255 / 0.08);
+.hud[data-mode="view"] .hud-ring,
+.hud[data-mode="drag"] .hud-ring {
+  --s: 10px;
+  border-color: var(--accent-text);
+  background: var(--accent-text);
 }
-
-/* over project cards: an accent pill. Solid colour, so no blend */
-.cursor-pos[data-mode="view"] {
-  mix-blend-mode: normal;
-}
-.cursor-pos[data-mode="view"] .cursor-ring {
-  --w: 104px;
-  --h: 42px;
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-}
-.cursor-pos[data-mode="view"] .cursor-label {
-  color: #0b0b0f;
-}
-
-/* over the 3D scene */
-.cursor-pos[data-mode="drag"] .cursor-ring {
-  --w: 78px;
-  --h: 78px;
-}
-.cursor-pos[data-mode="view"] .cursor-label,
-.cursor-pos[data-mode="drag"] .cursor-label {
-  opacity: 1;
-  transform: none;
-}
-
-/* over text: a thin caret, sized to the text under it */
-.cursor-pos[data-mode="text"] .cursor-ring {
-  --w: 2px;
-  --h: var(--caret, 26px);
+.hud[data-mode="text"] .hud-ring {
+  width: 2px;
+  height: var(--caret, 26px);
+  border: 0;
   border-radius: 1px;
-  border-color: transparent;
-  background: #fff;
+  background: var(--accent-text);
 }
-
-/* over inputs: let the native I-beam show */
-.cursor-pos[data-mode="native"] .cursor-ring {
-  opacity: 0;
+.hud[data-pressed="true"] .hud-ring {
+  --p: 0.8;
 }
-
-.cursor-pos[data-pressed="true"] .cursor-ring {
-  --s: 0.82;
+.hud-read {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  font: 500 11px/1 ui-monospace, "SFMono-Regular", Consolas, monospace;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--accent-text);
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  padding: 4px 7px;
+  border-radius: 4px;
+}
+.hud[data-mode="view"] .hud-read,
+.hud[data-mode="drag"] .hud-read {
+  background: var(--accent);
+  color: #0b0b0f;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 6px 9px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cursor-ring,
-  .cursor-dot,
-  .cursor-label {
+  .hud-ring {
     transition-duration: 0.12s !important;
   }
   .grain {
