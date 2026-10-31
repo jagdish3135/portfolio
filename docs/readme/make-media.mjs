@@ -42,6 +42,9 @@ if (run('shots')) {
   await ready(d)
   await d.addStyleTag({ content: HIDE })
   await sleep(2500)
+  // The particle-name intro is the first screen; the 3D glass hero comes after it.
+  await walkTo(d, await topOf(d, '#hero'))
+  await sleep(1500)
   await d.screenshot({ path: join(raw, 'hero.png') })
   await walkTo(d, (await topOf(d, '.work-stage')) + 675)
   await sleep(1500)
@@ -95,7 +98,7 @@ const dataUrl = (file) => `data:image/png;base64,${readFileSync(join(raw, file))
 
 const CARDS = [
   { file: 'card-hero', kicker: 'Hero · 3D', title: 'Glass UI layers, pulled apart.', text: 'An exploded interface in React Three Fiber that tilts with your mouse and turns when you drag it.', url: 'jagdish-patil / home', shot: 'hero.png' },
-  { file: 'card-work', kicker: 'Selected work', title: 'Eight projects in a 3D stack.', text: 'Scroll flips through the panels; hover plays a preview; a click flies the cover into its case study.', url: 'jagdish-patil / #work', shot: 'work.png' },
+  { file: 'card-work', kicker: 'Selected work', title: 'Seven projects in a 3D stack.', text: 'Scroll flips through the panels; hover plays a preview; a click flies the cover into its case study.', url: 'jagdish-patil / #work', shot: 'work.png' },
   { file: 'card-case', kicker: 'Case studies', title: 'Architecture from the real code.', text: 'Every project gets the problem, a diagram drawn from its repo, features, the hardest part and what’s next.', url: 'jagdish-patil / work / lexagent', shot: 'diagram.png' },
   { file: 'card-toolkit', kicker: 'Toolkit', title: 'No skill bars.', text: 'Each tool shows a dot for every project it’s in, in that project’s colour.', url: 'jagdish-patil / #toolkit', shot: 'toolkit.png' },
 ]

@@ -9,13 +9,13 @@
 
 <p align="center">
   <a href="https://jagdishpatil.vercel.app"><img src="https://img.shields.io/badge/Live_site-jagdishpatil.vercel.app-c6ff3d?style=flat-square&labelColor=0b0b0f" alt="Live site"></a>
-  <img src="https://img.shields.io/badge/Lighthouse_desktop-98–99_·_100_·_100_·_100-c6ff3d?style=flat-square&labelColor=0b0b0f" alt="Lighthouse desktop scores">
+  <img src="https://img.shields.io/badge/Lighthouse_desktop-97–98_·_100_·_100_·_100-c6ff3d?style=flat-square&labelColor=0b0b0f" alt="Lighthouse desktop scores">
   <img src="https://img.shields.io/badge/React_19-20232a?style=flat-square&logo=react&logoColor=61dafb" alt="React 19">
   <img src="https://img.shields.io/badge/TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript">
   <img src="https://img.shields.io/badge/React_Three_Fiber-000000?style=flat-square&logo=threedotjs&logoColor=white" alt="React Three Fiber">
   <img src="https://img.shields.io/badge/GSAP-0ae448?style=flat-square&logo=greensock&logoColor=white" alt="GSAP">
   <img src="https://img.shields.io/badge/Tailwind_4-06b6d4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
-  <img src="https://img.shields.io/badge/Playwright_tests-33_passing-2ead33?style=flat-square" alt="33 Playwright tests passing">
+  <img src="https://img.shields.io/badge/Playwright_tests-31_passing-2ead33?style=flat-square" alt="31 Playwright tests passing">
 </p>
 
 <p align="center">
@@ -72,14 +72,14 @@ Every word about a project comes from that project's own README and code. Projec
 
 ## 📊 Scores
 
-Lighthouse 12 on the production build (`npm run lighthouse`), 30 Oct 2026:
+Lighthouse 12 on the live site (`URL=https://jagdishpatil.vercel.app npm run lighthouse`), 31 Oct 2026:
 
 | Page | Form | Performance | Accessibility | Best practices | SEO |
 |---|---|:-:|:-:|:-:|:-:|
-| Home | Desktop | **98** | **100** | **100** | **100** |
-| LexAgent case study | Desktop | **99** | **100** | **100** | **100** |
-| Home | Mobile | 90 | 100 | 100 | 100 |
-| LexAgent case study | Mobile | 90 | 100 | 100 | 100 |
+| Home | Desktop | **97** | **100** | **100** | **100** |
+| LexAgent case study | Desktop | **98** | **100** | **100** | **100** |
+| Home | Mobile | 93 | 100 | 100 | 100 |
+| LexAgent case study | Mobile | 91 | 100 | 100 | 100 |
 
 <details>
 <summary><b>How it stays fast and accessible</b></summary>
@@ -129,7 +129,7 @@ Needs Node 20+.
 npm install
 npm run dev          # http://localhost:5220
 npm run build        # type check, build, then per-page HTML, sitemap and robots.txt
-npm run test:e2e     # Playwright on the production build, desktop and phone (33 checks)
+npm run test:e2e     # Playwright on the production build, desktop and phone (31 checks)
 ```
 
 <details>
@@ -140,7 +140,7 @@ npm run test:e2e     # Playwright on the production build, desktop and phone (33
 |---|---|
 | `npm run dev` | Dev server on port 5220 |
 | `npm run build` | `tsc`, `vite build`, then [`scripts/prerender.mjs`](scripts/prerender.mjs): a head (title, description, canonical, Open Graph, JSON-LD) for every page, plus `sitemap.xml` and `robots.txt` |
-| `npm run test:e2e` | 33 Playwright checks: the loader hands over, the particle intro draws and dissolves, the theme toggle is remembered, every card opens its case study (click on phones, keyboard on desktop), outside links are valid and respond, reduced motion gets the poster, copying the email works |
+| `npm run test:e2e` | 31 Playwright checks: the loader hands over, the particle intro draws and dissolves, the theme toggle is remembered, every card opens its case study (click on phones, keyboard on desktop), outside links are valid and respond, reduced motion gets the poster, copying the email works |
 | `npm run lighthouse` | Lighthouse scores for the build served on port 4173 (`npx vite preview --port 4173`) |
 | `npm run og` | Share images (1200×630) for every page into `public/og/` |
 | `node scripts/check-pages.mjs` | Opens every case study at desktop and phone size; reports console errors, broken images and sideways scroll |
