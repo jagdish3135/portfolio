@@ -2,8 +2,8 @@ import { SectionHeading } from '../components/SectionHeading'
 import { FadeUp, SplitReveal } from '../components/Reveal'
 
 const CURRENTLY = [
-  { k: 'Work', v: 'Part-time at FiadoLabs: UI/UX, Framer and Wix sites, blog writing, social media and reports.' },
-  { k: 'Open to', v: 'Forward Deployed Engineer roles and remote AI work.' },
+  { k: 'Work', v: 'Part-time UI/UX designer at FiadoLabs. I design product screens, build Framer and Wix sites, and look after the blog, social media and reports.' },
+  { k: 'Learning', v: 'Multi-agent systems, MCP, and the craft of a Forward Deployed Engineer: turning AI demos into products people use.' },
 ]
 
 export function About() {
