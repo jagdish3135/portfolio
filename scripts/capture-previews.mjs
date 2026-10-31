@@ -16,7 +16,6 @@ const SITES = {
   sanjaya: 'https://sanjaya-live.vercel.app',
   'sql-buddy': 'https://sql-buddy-app.vercel.app',
   glim: 'https://glim-mcp.vercel.app',
-  calculator: 'https://calculator-2-umber.vercel.app',
 }
 const KNIT_PROMO = '../../project videos/knit/Knit_v1_30s_4x5.mp4'
 const DURATION = 7000
@@ -42,12 +41,6 @@ const ACTIONS = {
       await sleep(DURATION / 70)
     }
     await page.mouse.up()
-  },
-  async calculator(page) {
-    for (const k of ['1', '2', '8', '*', '7', 'Enter', '+', '4', '2', 'Enter']) {
-      await page.keyboard.press(k)
-      await sleep(650)
-    }
   },
 }
 

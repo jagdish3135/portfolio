@@ -4,7 +4,7 @@
 
 <p align="center">
   <b>The portfolio of Jagdish Patil</b>: an AI-native builder and aspiring Forward Deployed Engineer in Surat, India.<br>
-  A 3D site with a custom cursor, a pinned stack of glass project cards and a full case study for each of eight live projects.
+  A 3D site with a custom cursor, a pinned stack of glass project cards and a full case study for each of seven live projects.
 </p>
 
 <p align="center">
@@ -39,7 +39,7 @@
 <table>
   <tr>
     <td width="50%"><img src="docs/readme/card-hero.webp" alt="The hero: an exploded stack of glass UI layers in 3D"></td>
-    <td width="50%"><img src="docs/readme/card-work.webp" alt="Selected work: eight projects in a pinned 3D stack"></td>
+    <td width="50%"><img src="docs/readme/card-work.webp" alt="Selected work: seven projects in a pinned 3D stack"></td>
   </tr>
   <tr>
     <td width="50%"><img src="docs/readme/card-case.webp" alt="A case study with an architecture diagram drawn from the project's code"></td>
@@ -66,7 +66,7 @@
 | ✉️ **Contact** | Copy-email button with a “copied” state and toast, LinkedIn, GitHub, and the live time in Surat. |
 | 🔀 **Transitions** | A lime-then-black panel wipe between pages (about 600 ms), SplitText line reveals and subtle image parallax, all on one easing curve in [`src/lib/motion.ts`](src/lib/motion.ts). |
 
-Every word about a project comes from that project's own README and code. Projects: [GlassBoxAPK](https://github.com/jagdish3135/glassboxapk), [LexAgent](https://github.com/jagdish3135/lexagent), [Knit](https://github.com/jagdish3135/knit), [JanDrishti](https://github.com/jagdish3135/jandrishti), [SQL Buddy](https://github.com/jagdish3135/sql-buddy), [Sanjaya](https://github.com/jagdish3135/sanjaya), [Glim](https://github.com/jagdish3135/glim) and [Calculator 2.0](https://github.com/jagdish3135/Calculator-2.0).
+Every word about a project comes from that project's own README and code. Projects: [GlassBoxAPK](https://github.com/jagdish3135/glassboxapk), [LexAgent](https://github.com/jagdish3135/lexagent), [Knit](https://github.com/jagdish3135/knit), [JanDrishti](https://github.com/jagdish3135/jandrishti), [SQL Buddy](https://github.com/jagdish3135/sql-buddy), [Sanjaya](https://github.com/jagdish3135/sanjaya) and [Glim](https://github.com/jagdish3135/glim).
 
 ---
 

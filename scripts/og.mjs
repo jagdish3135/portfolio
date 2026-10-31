@@ -41,7 +41,7 @@ const cards = [
         <div class="label"><span class="logo">JP</span>${site.name} · ${site.location.split(',')[0]}, India</div>
         <h1 style="font-size:76px">Building <span class="lime">AI</span> solutions. Custom setups, shipped live.</h1>
         <p class="pitch" style="font-size:21px">AI-native builder and aspiring Forward Deployed Engineer.</p>
-        <div class="foot"><span><b>8 projects</b>, live and public on GitHub</span><span>${host}</span></div>
+        <div class="foot"><span><b>${projects.length} projects</b>, live and public on GitHub</span><span>${host}</span></div>
       </div>`),
   },
   ...projects.map((p, i) => ({

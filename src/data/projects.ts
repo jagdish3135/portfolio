@@ -193,22 +193,6 @@ export const projects: Project[] = [
     summary:
         'Glim: an open-source MCP server that lets Claude, Cursor and other AI agents run an Instagram Business or Creator account, with two-step publishing and a demo mode. A case study by Jagdish Patil.',
   },
-  {
-    slug: 'calculator',
-    name: 'Calculator 2.0',
-    pitch: 'An animated calculator with a living number background: every key releases its digit into the glass. Built with Knit.',
-    year: 2026,
-    role: ROLE,
-    tags: ['Motion', 'Keyboard-first', 'Accessibility'],
-    stack: ['TypeScript', 'Vite', 'Plain CSS', 'No runtime dependencies', 'Vitest', 'Playwright + axe'],
-    accent: '#5EEAD4',
-    accentInk: '#0B0B0F',
-    live: 'https://calculator-2-umber.vercel.app',
-    repo: 'https://github.com/jagdish3135/Calculator-2.0',
-    media: media('calculator'),
-    summary:
-        'Calculator 2.0: an animated calculator with a living number background, keyboard support, a history tape and correct calculator rules, built with Knit. A case study by Jagdish Patil.',
-  },
 ]
 
 /** Smaller work, listed without a card or detail page. */

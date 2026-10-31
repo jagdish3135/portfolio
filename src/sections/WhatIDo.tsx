@@ -66,7 +66,7 @@ const CAPABILITIES: Capability[] = [
   {
     title: '3D & interactive frontends',
     body: 'Scroll stories, live globes, custom cursors and models made in Blender, kept fast and respectful of reduced-motion settings.',
-    proof: ['Sanjaya', 'GlassBoxAPK', 'Calculator 2.0'],
+    proof: ['Sanjaya', 'GlassBoxAPK', 'This portfolio'],
     layers: [
       <g key="grid" opacity="0.7">
         {[20, 35, 50, 65, 80].map((v) => (

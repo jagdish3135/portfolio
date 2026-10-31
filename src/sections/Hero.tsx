@@ -1,4 +1,4 @@
-import { lazy, Suspense, useLayoutEffect, useRef, useState, type MouseEvent } from 'react'
+import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState, type MouseEvent } from 'react'
 import { gsap, DUR, EASE, STAGGER } from '../lib/motion'
 import { MagneticButton } from '../components/MagneticButton'
 import { useIntro } from '../lib/intro'
@@ -29,6 +29,21 @@ export function Hero() {
   const [sceneOn, setSceneOn] = useState(false)
   const root = useRef<HTMLElement>(null)
   const time = useISTTime()
+  // The 3D scene gets the space above the copy, so the object never sits on the headline.
+  const copy = useRef<HTMLDivElement>(null)
+  const [copyH, setCopyH] = useState(0)
+  const [heroH, setHeroH] = useState(0)
+  useEffect(() => {
+    const el = copy.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      setCopyH(el.offsetHeight)
+      setHeroH(root.current?.offsetHeight ?? 0)
+    })
+    ro.observe(el)
+    if (root.current) ro.observe(root.current)
+    return () => ro.disconnect()
+  }, [])
 
   // Hide the copy until the loader hands over, then reveal it line by line.
   useLayoutEffect(() => {
@@ -62,12 +77,14 @@ export function Hero() {
 
   return (
     <section ref={root} id="hero" className="relative h-[100svh] min-h-[640px] w-full overflow-hidden" aria-labelledby="hero-title">
-      <div className={`absolute inset-0 transition-opacity duration-[1400ms] ${sceneOn || tier === 'static' ? 'opacity-100' : 'opacity-0'}`}>
+      <div
+        className={`absolute inset-0 transition-opacity duration-[1400ms] ${sceneOn || tier === 'static' ? 'opacity-100' : 'opacity-0'}`}
+      >
         {tier === 'static' ? (
           <Poster />
         ) : (
           <Suspense fallback={null}>
-            <Scene3D tier={tier} ready={ready} onReady={() => setSceneOn(true)} />
+            <Scene3D tier={tier} ready={ready} onReady={() => setSceneOn(true)} region={{ top: 88, bottom: heroH - copyH + 40 }} />
           </Suspense>
         )}
       </div>
@@ -80,7 +97,7 @@ export function Hero() {
       />
 
       <div className="pointer-events-none relative flex h-full flex-col justify-end">
-        <div className="container-x pb-6 md:pb-8">
+        <div ref={copy} className="container-x pb-6 md:pb-8">
           <div className="grid-12">
             <p data-hero-fade className="col-span-12 mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[15px] text-mute md:mb-8">
               <span>AI-native builder</span>

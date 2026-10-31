@@ -193,7 +193,7 @@ export function Work() {
         <SectionHeading index="03" label="Selected work" id="work-title" title="Things I’ve built and shipped." />
         <p className="mt-6 grid-12 text-[17px] leading-relaxed text-mute md:mt-8">
           <span className="col-span-12 max-w-[56ch] md:col-span-6 md:col-start-4">
-            Eight projects, all live and public on GitHub. I built each one solo, with AI as my co-pilot, then tested
+            Seven projects, all live and public on GitHub. I built each one solo, with AI as my co-pilot, then tested
             and deployed it.
           </span>
         </p>

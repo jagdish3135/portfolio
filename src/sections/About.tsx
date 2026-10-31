@@ -2,7 +2,6 @@ import { SectionHeading } from '../components/SectionHeading'
 import { FadeUp, SplitReveal } from '../components/Reveal'
 
 const CURRENTLY = [
-  { k: 'Building', v: '3D landing pages for my public apps, and this site.' },
   { k: 'Work', v: 'Part-time at FiadoLabs: UI/UX, Framer and Wix sites, blog writing, social media and reports.' },
   { k: 'Open to', v: 'Forward Deployed Engineer roles and remote AI work.' },
 ]
@@ -18,7 +17,7 @@ export function About() {
           id="about-title"
           className="col-span-12 font-display text-[clamp(30px,3.9vw,62px)] font-medium leading-[1.08] tracking-[-0.02em] md:col-span-9 md:col-start-4"
         >
-          I’m Jagdish, an AI-native builder in Surat, India. I build AI agents and web apps, and take them all the
+          <span className="text-accent-text">I’m Jagdish</span>, an AI-native builder in Surat, India. I build AI agents and web apps, and take them all the
           way to a live link.
         </SplitReveal>
         <FadeUp

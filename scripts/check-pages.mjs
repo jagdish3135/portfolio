@@ -3,7 +3,7 @@
 // Usage: node scripts/check-pages.mjs  (dev server on :5220)
 import { chromium } from 'playwright'
 const BASE = process.env.URL ?? 'http://localhost:5220'
-const slugs = ['glassboxapk', 'lexagent', 'knit', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'calculator']
+const slugs = ['glassboxapk', 'lexagent', 'knit', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim']
 const browser = await chromium.launch()
 let problems = 0
 for (const [device, opts] of [

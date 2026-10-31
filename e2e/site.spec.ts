@@ -21,8 +21,8 @@ test('home loads and the loader hands over to the hero', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
-test('the data file has all eight projects', () => {
-  expect(projects).toHaveLength(8)
+test('the data file has all seven projects', () => {
+  expect(projects).toHaveLength(7)
 })
 
 for (const p of projects) {

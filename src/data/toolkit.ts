@@ -10,11 +10,11 @@ export const toolkit: ToolGroup[] = [
     title: 'Languages',
     note: 'TypeScript first, everywhere',
     tools: [
-      { name: 'TypeScript', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'calculator', 'site'] },
+      { name: 'TypeScript', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'site'] },
       { name: 'JavaScript', usedIn: ['knit'] },
       { name: 'SQL', usedIn: ['sql-buddy'] },
       { name: 'Python', usedIn: ['glassboxapk'] },
-      { name: 'HTML & CSS', usedIn: ['calculator', 'knit', 'glim', 'site'] },
+      { name: 'HTML & CSS', usedIn: ['knit', 'glim', 'site'] },
     ],
   },
   {
@@ -23,7 +23,7 @@ export const toolkit: ToolGroup[] = [
     tools: [
       { name: 'React', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'site'] },
       { name: 'Next.js', usedIn: ['lexagent', 'sanjaya', 'habit-tracker'] },
-      { name: 'Vite', usedIn: ['glassboxapk', 'jandrishti', 'sql-buddy', 'calculator', 'site'] },
+      { name: 'Vite', usedIn: ['glassboxapk', 'jandrishti', 'sql-buddy', 'site'] },
       { name: 'Tailwind CSS', usedIn: ['habit-tracker', 'site'] },
       { name: 'Zod', usedIn: ['lexagent', 'sql-buddy', 'glim'] },
       { name: 'DuckDB-WASM', usedIn: ['sql-buddy'] },
@@ -72,10 +72,10 @@ export const toolkit: ToolGroup[] = [
     title: 'Test & deploy',
     note: 'Nothing is done until it’s live',
     tools: [
-      { name: 'Playwright', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'calculator', 'site'] },
-      { name: 'Vitest', usedIn: ['lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'calculator'] },
-      { name: 'axe', usedIn: ['calculator', 'habit-tracker'] },
-      { name: 'Vercel', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'calculator', 'site'] },
+      { name: 'Playwright', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'site'] },
+      { name: 'Vitest', usedIn: ['lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim'] },
+      { name: 'axe', usedIn: ['habit-tracker'] },
+      { name: 'Vercel', usedIn: ['glassboxapk', 'lexagent', 'jandrishti', 'sql-buddy', 'sanjaya', 'glim', 'site'] },
       { name: 'GitHub Pages', usedIn: ['knit'] },
       { name: 'GitHub Actions', usedIn: ['knit'] },
     ],

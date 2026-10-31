@@ -13,7 +13,6 @@ export const SITES = {
   sanjaya: 'https://sanjaya-live.vercel.app',
   'sql-buddy': 'https://sql-buddy-app.vercel.app',
   glim: 'https://glim-mcp.vercel.app',
-  calculator: 'https://calculator-2-umber.vercel.app',
 }
 
 // Hide custom cursors, grain and cookie-style overlays so stills look clean.

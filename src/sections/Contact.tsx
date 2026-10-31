@@ -98,7 +98,7 @@ export function Contact() {
             Let’s build <br className="hidden sm:block" />
             something.
           </SplitReveal>
-          <div className="pointer-events-none absolute -right-6 top-1/2 hidden -translate-y-1/2 scale-[1.6] opacity-80 lg:block">
+          <div className="pointer-events-none absolute right-0 top-1/2 hidden origin-right -translate-y-1/2 scale-[1.3] opacity-80 lg:block xl:scale-[1.45]">
             <GlassStack layers={envelope} />
           </div>
         </div>

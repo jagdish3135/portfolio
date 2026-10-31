@@ -543,3 +543,13 @@ html.is-loading {
   animation: none;
   mix-blend-mode: normal;
 }
+
+/* ---------- Nav pills ---------- */
+.nav-pill {
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 10px 30px -18px var(--shadow);
+}

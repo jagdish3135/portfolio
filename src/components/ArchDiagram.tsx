@@ -93,7 +93,7 @@ export function ArchDiagram({ diagram, accent, label }: { diagram: Diagram; acce
   }, [])
 
   return (
-    <div ref={root} className="-mx-[var(--gutter)] overflow-x-auto px-[var(--gutter)] md:mx-0 md:overflow-visible md:px-0">
+    <div ref={root} className="overflow-x-auto pb-2 lg:overflow-visible lg:pb-0">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full min-w-[880px]"

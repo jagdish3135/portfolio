@@ -25,15 +25,23 @@ function useWindowPointer() {
   return p
 }
 
-function Rig({ tier, ready, drag }: { tier: Tier; ready: boolean; drag: MutableRefObject<Drag> }) {
+/** Free space for the object, in canvas pixels from the top (the hero copy sits below it). */
+export type Region = { top: number; bottom: number }
+
+function Rig({ tier, ready, drag, region }: { tier: Tier; ready: boolean; drag: MutableRefObject<Drag>; region?: Region }) {
   const group = useRef<THREE.Group>(null)
   const pointer = useWindowPointer()
   const { viewport, size } = useThree()
   const narrow = size.width < 768
-  const scale = narrow ? Math.min(0.8, viewport.width / 4.6) : Math.min(0.78, viewport.width / 11.2)
-  const position: [number, number, number] = narrow
-    ? [0, viewport.height * 0.2, 0]
-    : [viewport.width * 0.17, viewport.height * 0.19, 0]
+  // Fit the object inside the free region above the hero copy, so it never covers text.
+  const top = region?.top ?? 0
+  const bottom = region && region.bottom > top + 80 ? region.bottom : size.height
+  const regionH = ((bottom - top) / size.height) * viewport.height
+  const centreY = (0.5 - (top + bottom) / 2 / size.height) * viewport.height
+  const scale = narrow
+    ? Math.min(1.1, viewport.width / 4.4, regionH / 3)
+    : Math.min(1.45, viewport.width / 10.5, regionH / 3.2)
+  const position: [number, number, number] = narrow ? [0, centreY, 0] : [viewport.width * 0.2, centreY, 0]
 
   useFrame(({ clock }, dt) => {
     const g = group.current
@@ -101,7 +109,7 @@ function Studio({ pal }: { pal: Palette }) {
   return <StudioLights lights={lights} />
 }
 
-export default function Scene3D({ tier, ready, onReady }: { tier: Tier; ready: boolean; onReady?: () => void }) {
+export default function Scene3D({ tier, ready, onReady, region }: { tier: Tier; ready: boolean; onReady?: () => void; region?: Region }) {
   const pal = PALETTES[useTheme()]
   const wrap = useRef<HTMLDivElement>(null)
   const drag = useRef<Drag>({ active: false, lastX: 0, rot: 0 })
@@ -159,7 +167,7 @@ export default function Scene3D({ tier, ready, onReady }: { tier: Tier; ready: b
         <PaletteContext.Provider value={pal}>
           <Backdrop pal={pal} />
           <Studio pal={pal} />
-          <Rig tier={tier} ready={ready} drag={drag} />
+          <Rig tier={tier} ready={ready} drag={drag} region={region} />
         </PaletteContext.Provider>
       </Canvas>
     </div>

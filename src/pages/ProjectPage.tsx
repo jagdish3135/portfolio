@@ -99,7 +99,7 @@ function Study({ p, cs }: { p: Project; cs: CaseStudy }) {
         </div>
         <div className="mt-12 rounded-[24px] border border-line bg-surface/50 p-4 md:mt-16 md:p-8">
           <ArchDiagram diagram={cs.diagram} accent={accentFor(p.accent, theme)} label={`${p.name} architecture: ${cs.how.map((h) => h.title).join(', then ')}.`} />
-          <p className="mt-3 text-[13px] text-mute md:hidden">Scroll the diagram sideways →</p>
+          <p className="mt-3 text-[13px] text-mute lg:hidden">Scroll the diagram sideways →</p>
         </div>
         <ol className="grid-12 mt-12 gap-y-8 md:mt-16">
           {cs.how.map((h, i) => (
