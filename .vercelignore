@@ -1,0 +1,10 @@
+# Not needed to build or serve the site
+.shots
+test-results
+playwright-report
+docs
+e2e
+playground
+dist
+.vercel
+graphify-out

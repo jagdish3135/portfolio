@@ -7,3 +7,6 @@ graphify-out
 test-results
 playwright-report
 docs/readme/raw
+
+.vercel
+.env*
